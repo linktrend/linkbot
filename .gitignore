@@ -1,0 +1,156 @@
+# LiNKbot - OpenClaw Deployment
+# .gitignore for Node.js, TypeScript, Python, and OpenClaw specific files
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*~
+
+# Node.js Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build Outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+.next/
+.nuxt/
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Environment Variables and Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.key
+*.pem
+*.cert
+*.crt
+*.p12
+credentials.json
+secrets.json
+config.local.json
+
+# Google Workspace Credentials
+config/business-partner/secrets/
+**/secrets/*.json
+google-oauth-credentials.json
+google-service-account.json
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OpenClaw Specific
+.openclaw/
+openclaw-data/
+openclaw.db
+sessions/
+conversations/
+chat-history/
+user-data/
+
+# Bot Runtime Data
+bots/runtime/
+bots/*.db
+bots/sessions/
+skills/runtime/
+
+# OpenClaw Clone (Submodule-like Reference)
+# This is the forked OpenClaw that gets configured locally
+# It's tracked in its own git repo, not in this workspace
+bots/business-partner/
+
+# Deployment Artifacts
+deploy/temp/
+deploy/*.tar.gz
+deploy/*.zip
+
+# Test Coverage
+coverage/
+.nyc_output/
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Lock Files (keep package-lock.json or yarn.lock, but not both)
+# Uncomment the one you want to ignore:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Documentation Build Output
+docs/.vuepress/dist/
+docs/.vitepress/dist/
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Windows
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.nfs*
+
+# Skills are external repos (managed separately)
+skills/*/.git
+skills/*/node_modules

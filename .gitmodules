@@ -1,0 +1,3 @@
+[submodule "bots/lisa"]
+	path = bots/lisa
+	url = https://github.com/linktrend/lisa-linkbot.git

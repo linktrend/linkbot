@@ -1,0 +1,1 @@
+2026-02-09 16:21:43 | test-safe-skill | SCORE: 100 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/test-safe-skill-20260209-162141.json

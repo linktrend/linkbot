@@ -1,0 +1,15 @@
+{
+  "skill_name": "financial-calculator",
+  "skill_path": "/Users/linktrend/Projects/LiNKbot/skills/financial-calculator",
+  "skill_directory": "/Users/linktrend/Projects/LiNKbot/skills/financial-calculator",
+  "is_safe": true,
+  "max_severity": "SAFE",
+  "findings_count": 0,
+  "findings": [],
+  "scan_duration_seconds": 0.01023101806640625,
+  "duration_ms": 10,
+  "analyzers_used": [
+    "static_analyzer"
+  ],
+  "timestamp": "2026-02-09T16:23:41.896846"
+}

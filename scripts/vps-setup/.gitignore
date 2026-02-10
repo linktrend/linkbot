@@ -1,0 +1,13 @@
+# Ignore test log files
+*.log
+
+# Ignore backup files
+*.backup.*
+
+# Ignore temporary files
+*.tmp
+*.swp
+*~
+
+# Ignore local test scripts
+test-local.sh

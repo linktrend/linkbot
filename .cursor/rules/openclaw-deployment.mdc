@@ -1,0 +1,299 @@
+# LiNKbot OpenClaw Deployment Rules
+
+You are an expert systems engineer working on **LiNKbot**, a simplified single-bot deployment using the OpenClaw framework.
+
+## Project Context
+
+This is **Phase 1: Single Business Partner Bot** - a simplified, production-ready deployment that prioritizes:
+
+1. **Simplicity**: Single VPS bot using OpenClaw's battle-tested codebase
+2. **Speed to Production**: Leveraging DigitalOcean 1-Click deployment
+3. **Proven Infrastructure**: Building on OpenClaw's production-ready foundation
+4. **Iterative Growth**: Start simple, add complexity only when needed
+
+### Historical Context
+
+This project is a fresh start. The previous LiNKbot implementation (archived at `/Users/linktrend/Projects/LiNKbot-Archive-2026-02-07/`) was a complex dual-bot system with:
+- Custom protocol implementation
+- Cloud Bot (strategic orchestrator)
+- Local Bot (hardened execution node)
+- Custom UI dashboard
+
+**The archived specs in `docs/archive/specs/` are for reference/learning only.** They document the original dual-bot vision but are NOT implementation specifications for this simplified approach.
+
+---
+
+## 1. Deployment Philosophy
+
+### Start Simple, Scale Smart
+
+- Begin with proven solutions (OpenClaw) rather than custom implementations
+- Deploy quickly to gather real-world feedback
+- Add complexity only when justified by actual requirements
+- Prioritize reliability and maintainability over architectural elegance
+
+### Current Goal
+
+Deploy a **single business partner bot** that can:
+- Handle business-related conversations
+- Integrate with existing systems
+- Provide reliable, production-grade service
+- Scale horizontally as demand grows
+
+---
+
+## 2. Technology Stack
+
+### Core Platform
+
+- **Base**: OpenClaw production codebase
+- **Deployment**: DigitalOcean 1-Click OpenClaw App
+- **Infrastructure**: Single VPS initially, horizontal scaling as needed
+- **Customization**: Minimal, focusing on core business partner functionality
+
+### Development Approach
+
+- Fork or deploy OpenClaw with minimal modifications
+- Focus on configuration and skill development rather than core platform changes
+- Leverage OpenClaw's existing features and patterns
+- Document any customizations clearly
+
+---
+
+## 3. Project Structure
+
+```
+LiNKbot/
+├── .cursor/
+│   └── rules/
+│       └── openclaw-deployment.mdc  # This file
+├── .gitignore
+├── README.md
+├── bots/          # Bot configuration and deployment files
+│   └── (future: config files, deployment scripts)
+├── skills/        # Skill development and customization
+│   └── (future: custom skills for business partner bot)
+└── docs/
+    ├── deployment/                  # OpenClaw deployment guides
+    │   ├── OPENCLAW_README.md
+    │   ├── DEPLOYMENT_SUMMARY.md
+    │   ├── OPENCLAW_DEPLOYMENT_GUIDE.md
+    │   ├── OPENCLAW_DEPLOYMENT_CHECKLIST.md
+    │   ├── OPENCLAW_COST_ANALYSIS.md
+    │   └── OPENCLAW_QUICK_REFERENCE.md
+    └── archive/
+        └── specs/                   # Reference only (dual-bot system specs)
+```
+
+---
+
+## 4. Development Guidelines
+
+### When Adding Features
+
+1. **Check OpenClaw First**: Does OpenClaw already provide this functionality?
+2. **Prefer Configuration**: Can this be achieved through configuration vs code changes?
+3. **Skills Over Core Changes**: Implement as a skill rather than modifying core OpenClaw
+4. **Document Rationale**: Clearly document why any customization is necessary
+
+### Code Organization
+
+- **`bots/`**: Configuration files, deployment scripts, environment configs
+- **`skills/`**: Custom skills specific to business partner bot functionality
+- **`docs/deployment/`**: All OpenClaw deployment documentation
+- **`docs/archive/`**: Historical reference material (read-only)
+
+### What NOT to Do
+
+- DO NOT implement custom protocols or communication layers
+- DO NOT create dual-bot architectures (we're starting with single bot)
+- DO NOT build custom UI dashboards (use OpenClaw's existing interfaces)
+- DO NOT add complexity without clear justification
+- DO NOT reference archived specs as implementation requirements
+
+---
+
+## 5. Deployment Workflow
+
+### Phase 1: Research & Planning
+
+1. Review OpenClaw documentation and architecture
+2. Identify DigitalOcean 1-Click deployment options
+3. Document minimal customization needs for business partner bot
+4. Plan skill development approach
+
+### Phase 2: Initial Deployment
+
+1. Deploy OpenClaw to DigitalOcean using 1-Click option
+2. Configure for business partner bot use case
+3. Test basic functionality
+4. Document deployment process
+
+### Phase 3: Customization & Skills
+
+1. Develop business-specific skills
+2. Configure bot personality and capabilities
+3. Test with real business scenarios
+4. Iterate based on feedback
+
+### Phase 4: Production & Scaling
+
+1. Production deployment
+2. Monitor performance and usage
+3. Scale horizontally as needed
+4. Plan future enhancements based on real requirements
+
+---
+
+## 6. Documentation Requirements
+
+### Mandatory Documentation
+
+- **Deployment Steps**: Every deployment action must be documented
+- **Configuration Changes**: All customizations must be tracked
+- **Skill Development**: Document purpose, inputs, outputs of each skill
+- **Decisions**: Architectural decisions and their rationale
+
+### Documentation Location
+
+- Deployment docs: `docs/deployment/`
+- Skills docs: `skills/README.md` (to be created)
+- Decision logs: `docs/decisions/` (to be created as needed)
+
+---
+
+## 7. Testing Strategy
+
+### Before Deployment
+
+- Verify OpenClaw installation locally (if possible)
+- Test configuration changes in isolation
+- Validate skills before integration
+
+### After Deployment
+
+- Smoke test basic bot functionality
+- Test business-specific use cases
+- Monitor logs for errors
+- Verify scaling behavior
+
+---
+
+## 8. Security Considerations
+
+### Leverage OpenClaw's Security
+
+- Use OpenClaw's built-in authentication and authorization
+- Follow OpenClaw's security best practices
+- Don't weaken existing security measures
+
+### Custom Security
+
+- Secure any API keys and credentials
+- Use environment variables for secrets
+- Never commit secrets to repository
+- Document security decisions
+
+---
+
+## 9. Scaling Plan
+
+### Initial Deployment
+
+- Single VPS instance
+- Vertical scaling (upgrade instance size) as first option
+
+### Horizontal Scaling
+
+- Add additional VPS instances when vertical scaling insufficient
+- Use load balancer for distribution
+- Share state via database (OpenClaw's approach)
+
+### Multi-Bot Future
+
+- When justified by requirements, add specialized bots
+- Each bot = separate OpenClaw instance
+- Communication via OpenClaw's mechanisms or APIs
+- Document multi-bot architecture decisions
+
+---
+
+## 10. Priority Hierarchy
+
+When making decisions, follow this priority:
+
+1. **Reliability**: Proven solutions over custom implementations
+2. **Simplicity**: Minimal complexity that meets requirements
+3. **Speed**: Get to production quickly to gather real feedback
+4. **Scalability**: Design for growth but don't over-engineer initially
+
+---
+
+## 11. Prohibited Actions
+
+### Universal Prohibitions
+
+- DO NOT recreate the dual-bot architecture from the archive
+- DO NOT use archived specs as implementation requirements
+- DO NOT build custom protocol layers
+- DO NOT create custom UI dashboards without clear justification
+- DO NOT add dependencies without explicit need
+- DO NOT commit secrets or credentials
+
+### Development Prohibitions
+
+- DO NOT modify OpenClaw core without understanding implications
+- DO NOT bypass OpenClaw's built-in features
+- DO NOT implement workarounds for problems that should be fixed upstream
+- DO NOT sacrifice security for convenience
+
+---
+
+## 12. Getting Help
+
+### When Stuck
+
+1. **Check OpenClaw Documentation**: Likely answered there
+2. **Review Deployment Docs**: Check `docs/deployment/` for guidance
+3. **Ask for Clarification**: If unclear, stop and ask
+4. **Propose Solutions**: When asking, include recommended approach
+
+### Information Sources
+
+- OpenClaw GitHub repository
+- OpenClaw documentation
+- DigitalOcean documentation
+- `docs/deployment/` in this repository
+- `docs/archive/specs/` for historical context only
+
+---
+
+## 13. Success Criteria
+
+### Phase 1 Success
+
+- OpenClaw deployed to DigitalOcean
+- Basic bot functionality operational
+- Can handle business conversations
+- Documented deployment process
+- Clear path to customization
+
+### Long-term Success
+
+- Reliable, production-grade service
+- Positive user feedback
+- Easy to maintain and update
+- Clear scaling path
+- Justified complexity (every feature earns its place)
+
+---
+
+## End of Rules
+
+**Remember**: This is a simplified, practical approach. Start with OpenClaw's proven foundation, deploy quickly, and iterate based on real needs.
+
+**Philosophy**: "Start simple, scale smart" - complexity must be earned through demonstrated need, not assumed upfront.
+
+**Historical Note**: The archived dual-bot system represents one vision. This project represents a different approach: pragmatic, production-focused, and built on proven foundations.
+
+When in doubt: **Check OpenClaw docs first, then ask.**

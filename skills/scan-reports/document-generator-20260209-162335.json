@@ -1,0 +1,15 @@
+{
+  "skill_name": "document-generator",
+  "skill_path": "/Users/linktrend/Projects/LiNKbot/skills/document-generator",
+  "skill_directory": "/Users/linktrend/Projects/LiNKbot/skills/document-generator",
+  "is_safe": true,
+  "max_severity": "SAFE",
+  "findings_count": 0,
+  "findings": [],
+  "scan_duration_seconds": 0.0036590099334716797,
+  "duration_ms": 3,
+  "analyzers_used": [
+    "static_analyzer"
+  ],
+  "timestamp": "2026-02-09T16:23:37.370531"
+}
