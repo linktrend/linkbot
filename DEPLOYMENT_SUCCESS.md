@@ -77,7 +77,7 @@
 
 `/root/openclaw-bot/.env`:
 ```bash
-GOG_KEYRING_PASSWORD=
+GOG_KEYRING_PASSWORD=<YOUR_KEYRING_PASSWORD>
 GOG_ACCOUNT=lisa@linktrend.media
 ```
 
@@ -111,7 +111,7 @@ GOG_ACCOUNT=lisa@linktrend.media
 
 **Token Storage:**
 - Location: `/root/.config/gogcli/keyring/` (encrypted)
-- Password: `REDACTED_PASSWORD`
+- Password: Configured in `.env`
 - Refresh token: ✅ Obtained with `--force-consent`
 
 ### 4. Lisa's Capabilities
@@ -243,7 +243,7 @@ Currently, Lisa can **actively check** email via `exec gog gmail` commands. The 
 ## Support & Troubleshooting
 
 **If Lisa can't access email:**
-1. Check `gog` auth: `ssh root@178.128.77.125 'export GOG_KEYRING_PASSWORD="REDACTED_PASSWORD" && gog auth list'`
+1. Check `gog` auth: `ssh root@178.128.77.125 'export GOG_KEYRING_PASSWORD="<YOUR_KEYRING_PASSWORD>" && gog auth list'`
 2. Check `exec` allowlist: `ssh root@178.128.77.125 'cat /root/.openclaw/exec-approvals.json'`
 3. Check OpenClaw logs: `ssh root@178.128.77.125 'journalctl -u openclaw -n 50'`
 4. Restart OpenClaw: `ssh root@178.128.77.125 'systemctl restart openclaw'`
@@ -263,7 +263,7 @@ journalctl -u openclaw -f
 systemctl restart openclaw
 
 # Test gog auth (on VPS)
-export GOG_KEYRING_PASSWORD="REDACTED_PASSWORD"
+export GOG_KEYRING_PASSWORD="<YOUR_KEYRING_PASSWORD>"
 gog gmail list --max 5
 
 # Update Lisa bot code

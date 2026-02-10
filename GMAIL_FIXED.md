@@ -82,7 +82,7 @@ git push origin main
 **Current Status:**
 - ✅ OAuth token stored: `/root/.config/gogcli/keyring/`
 - ✅ Refresh token obtained (with `--force-consent`)
-- ✅ Keyring password in `.env`: `REDACTED_PASSWORD`
+- ✅ Keyring password configured in `.env`
 - ✅ Auto-renewal enabled
 
 ## Why `gog` CLI is Better
@@ -121,7 +121,7 @@ http://localhost:18789
 ### Via Command Line (Direct Test)
 ```bash
 ssh root@178.128.77.125
-export GOG_KEYRING_PASSWORD="REDACTED_PASSWORD"
+export GOG_KEYRING_PASSWORD="<YOUR_KEYRING_PASSWORD>"
 gog gmail list --max 5
 ```
 
@@ -145,7 +145,7 @@ These files are automatically managed by the deployment script:
 ```
 Location: /root/.config/gogcli/keyring/
 Encryption: AES (file-based keyring)
-Password: REDACTED_PASSWORD (from .env)
+Password: Configured in .env
 Status: Valid and auto-renewing
 ```
 
@@ -175,7 +175,7 @@ ssh root@178.128.77.125
 which gog  # Should show /usr/local/bin/gog
 
 # Check if gog auth works
-export GOG_KEYRING_PASSWORD="REDACTED_PASSWORD"
+export GOG_KEYRING_PASSWORD="<YOUR_KEYRING_PASSWORD>"
 gog auth list  # Should show lisa@linktrend.media
 ```
 

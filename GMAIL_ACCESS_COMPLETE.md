@@ -37,7 +37,7 @@ Should return your recent emails.
 **Issue:** `GOG_KEYRING_PASSWORD` not passed to exec subprocesses  
 **Fix:** Added password to `/root/openclaw-bot/.env`:
 ```bash
-GOG_KEYRING_PASSWORD=REDACTED_PASSWORD
+GOG_KEYRING_PASSWORD=<YOUR_KEYRING_PASSWORD>
 ```
 
 Systemd loads this via `EnvironmentFile=` directive, making it available to all subprocesses.
