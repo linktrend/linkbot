@@ -9,19 +9,19 @@
   "skills": {
     "shared": {
       "gmail-integration": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Gmail API integration for email management"
       },
       "google-docs": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Google Docs API integration"
       },
       "google-sheets": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Google Sheets API integration"
@@ -30,13 +30,13 @@
     
     "coding": {
       "python-coding": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "development",
         "description": "Python code generation and execution"
       },
       "typescript-coding": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "development",
         "description": "TypeScript code generation"
@@ -45,25 +45,25 @@
     
     "specialized": {
       "document-generator": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Automated document generation"
       },
       "financial-calculator": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "business",
         "description": "Financial calculations and analysis"
       },
       "meeting-scheduler": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Meeting scheduling automation"
       },
       "task-management": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Task and project management"
@@ -100,28 +100,28 @@
         "source": "google-labs-antigravity-kit"
       },
       "behavioral-modes": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "ai",
         "description": "AI behavior modes",
         "source": "google-labs-antigravity-kit"
       },
       "brainstorming": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Ideation techniques",
         "source": "google-labs-antigravity-kit"
       },
       "clean-code": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "development",
         "description": "Clean code principles",
         "source": "google-labs-antigravity-kit"
       },
       "code-review-checklist": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "quality",
         "description": "Code review standards",
@@ -219,7 +219,7 @@
         "source": "google-labs-antigravity-kit"
       },
       "parallel-agents": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "ai",
         "description": "Multi-agent workflows",
@@ -233,7 +233,7 @@
         "source": "google-labs-antigravity-kit"
       },
       "plan-writing": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "productivity",
         "description": "Project planning",
@@ -317,7 +317,7 @@
         "source": "google-labs-antigravity-kit"
       },
       "web-design-guidelines": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "frontend",
         "description": "Web design standards",
@@ -406,7 +406,7 @@
         "source": "google-labs-antigravity-kit"
       },
       "orchestrator": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "architecture",
         "description": "Multi-agent orchestration",
@@ -420,28 +420,28 @@
         "source": "google-labs-antigravity-kit"
       },
       "performance-optimizer": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "quality",
         "description": "Performance optimization specialist",
         "source": "google-labs-antigravity-kit"
       },
       "product-manager": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "management",
         "description": "Product management specialist",
         "source": "google-labs-antigravity-kit"
       },
       "product-owner": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "management",
         "description": "Product ownership specialist",
         "source": "google-labs-antigravity-kit"
       },
       "project-planner": {
-        "enabled": false,
+        "enabled": true,
         "risk_score": 0,
         "category": "management",
         "description": "Project planning specialist",

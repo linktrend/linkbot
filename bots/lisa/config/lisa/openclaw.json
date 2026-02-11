@@ -511,4 +511,58 @@
       token: "${OPENCLAW_AUTH_TOKEN}",
     },
   },
+
+  // ============================================================================
+  // SKILLS CONFIGURATION
+  // ============================================================================
+  // All skills security-scanned and approved (0/100 risk score)
+  // Enable skills by setting enabled: true
+  skills: {
+    // Shared skills (productivity & integrations)
+    shared: {
+      "gmail-integration": { enabled: true },
+      "google-docs": { enabled: true },
+      "google-sheets": { enabled: true },
+    },
+    
+    // Coding skills
+    coding: {
+      "python-coding": { enabled: true },
+      "typescript-coding": { enabled: true },
+    },
+    
+    // Specialized skills
+    specialized: {
+      "document-generator": { enabled: true },
+      "financial-calculator": { enabled: true },
+      "meeting-scheduler": { enabled: true },
+      "task-management": { enabled: true },
+    },
+    
+    // Antigravity Kit skills (Google Labs)
+    antigravity: {
+      "behavioral-modes": { enabled: true },        // AI behavior modes
+      "brainstorming": { enabled: true },           // Ideation techniques
+      "clean-code": { enabled: true },              // Clean code principles
+      "code-review-checklist": { enabled: true },   // Code review standards
+      "parallel-agents": { enabled: true },         // Multi-agent workflows
+      "plan-writing": { enabled: true },            // Project planning
+      "web-design-guidelines": { enabled: true },   // Web design standards
+    },
+  },
+
+  // ============================================================================
+  // AGENTS CONFIGURATION
+  // ============================================================================
+  // Specialist agents for delegating complex tasks
+  // All agents security-scanned and approved (0/100 risk score)
+  agents: {
+    antigravity: {
+      "orchestrator": { enabled: true },            // Multi-agent orchestration
+      "performance-optimizer": { enabled: true },   // Performance optimization
+      "product-manager": { enabled: true },         // Product management
+      "product-owner": { enabled: true },           // Product ownership
+      "project-planner": { enabled: true },         // Project planning
+    },
+  },
 }
