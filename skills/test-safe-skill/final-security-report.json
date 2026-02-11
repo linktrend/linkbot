@@ -1,0 +1,55 @@
+{
+  "skill_name": "test-safe-skill",
+  "skill_path": "/Users/linktrend/Projects/LiNKbot/skills/test-safe-skill",
+  "scan_timestamp": "2026-02-11T09:31:33.344417Z",
+  "verdict": "APPROVED",
+  "total_risk_score": 0,
+  "risk_breakdown": {
+    "cisco_scanner": 2,
+    "ai_analysis": 0,
+    "trufflehog_secrets": 0,
+    "semgrep_sast": 0,
+    "provenance": 0
+  },
+  "findings_count": 2,
+  "findings": [
+    {
+      "id": "MANIFEST_INVALID_NAME_794e30271c",
+      "rule_id": "MANIFEST_INVALID_NAME",
+      "category": "policy_violation",
+      "severity": "INFO",
+      "title": "Skill name does not follow agent skills naming rules",
+      "description": "Skill name 'Test Safe Skill' is invalid. Agent skills require lowercase letters, numbers, and hyphens only, with a maximum length of 64 characters.",
+      "file_path": "SKILL.md",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Rename the skill to match `[a-z0-9-]{1,64}` (e.g., 'pdf-processing')",
+      "analyzer": "static",
+      "metadata": {},
+      "source_scanner": "cisco"
+    },
+    {
+      "id": "MANIFEST_MISSING_LICENSE_c5ae9be793",
+      "rule_id": "MANIFEST_MISSING_LICENSE",
+      "category": "policy_violation",
+      "severity": "INFO",
+      "title": "Skill does not specify a license",
+      "description": "Skill manifest does not include a 'license' field. Specifying a license helps users understand usage terms.",
+      "file_path": "SKILL.md",
+      "line_number": null,
+      "snippet": null,
+      "remediation": "Add 'license' field to SKILL.md frontmatter (e.g., MIT, Apache-2.0)",
+      "analyzer": "static",
+      "metadata": {},
+      "source_scanner": "cisco"
+    }
+  ],
+  "scanners_run": [
+    "cisco",
+    "semgrep",
+    "trufflehog",
+    "ai_analysis",
+    "provenance"
+  ],
+  "recommendation": "Safe to use - Risk score 0/100"
+}

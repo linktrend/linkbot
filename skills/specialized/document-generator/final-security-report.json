@@ -1,0 +1,23 @@
+{
+  "skill_name": "document-generator",
+  "skill_path": "/Users/linktrend/Projects/LiNKbot/skills/specialized/document-generator",
+  "scan_timestamp": "2026-02-11T09:31:06.694847Z",
+  "verdict": "APPROVED",
+  "total_risk_score": 0,
+  "risk_breakdown": {
+    "cisco_scanner": 0,
+    "ai_analysis": 0,
+    "trufflehog_secrets": 0,
+    "semgrep_sast": 0,
+    "provenance": 0
+  },
+  "findings_count": 0,
+  "findings": [],
+  "scanners_run": [
+    "semgrep",
+    "trufflehog",
+    "ai_analysis",
+    "provenance"
+  ],
+  "recommendation": "Safe to use - Risk score 0/100"
+}

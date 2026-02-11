@@ -5,3 +5,5 @@
 2026-02-09 16:23:33 | meeting-scheduler | SCORE: 0 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/meeting-scheduler-20260209-162331.json
 2026-02-09 16:23:37 | document-generator | SCORE: 0 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/document-generator-20260209-162335.json
 2026-02-09 16:23:42 | financial-calculator | SCORE: 0 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/financial-calculator-20260209-162340.json
+2026-02-11 17:29:43 | test-safe-skill | SCORE: 2 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/test-safe-skill-20260211-172938.json
+2026-02-11 17:31:27 | test-safe-skill | SCORE: 2 | REPORT: /Users/linktrend/Projects/LiNKbot/skills/scan-reports/test-safe-skill-20260211-173125.json

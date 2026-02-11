@@ -1,0 +1,35 @@
+{
+  "import_session": {
+    "timestamp": "2026-02-11T09:31:33Z",
+    "mode": "test",
+    "category_filter": "all"
+  },
+  "statistics": {
+    "total_skills": 10,
+    "scanned": 10,
+    "approved": 10,
+    "rejected": 0,
+    "borderline": 0,
+    "skipped": 0
+  },
+  "approved_skills": [
+  "gmail-integration",
+  "google-docs",
+  "google-sheets",
+  "python-coding",
+  "typescript-coding",
+  "document-generator",
+  "financial-calculator",
+  "meeting-scheduler",
+  "task-management",
+  "test-safe-skill"
+],
+  "rejected_skills": [
+  ""
+],
+  "borderline_skills": [
+  ""
+],
+  "success_rate": 100.0,
+  "reports_directory": "/Users/linktrend/Projects/LiNKbot/skills/scan-reports"
+}

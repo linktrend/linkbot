@@ -1,26 +1,21 @@
 ---
-name: test-safe-skill
-description: A simple, safe test skill for validating the Cisco Skill Scanner installation
-license: MIT
-allowed-tools:
-  - Python
+name: Test Safe Skill
+description: A minimal test skill for security scanning validation
+version: 1.0.0
+author: LiNKbot Team
+category: testing
 ---
 
 # Test Safe Skill
 
-## Description
-A simple, safe test skill for validating the Cisco Skill Scanner installation.
+This is a completely safe skill used for testing the security scanning infrastructure.
 
 ## Purpose
-This skill is designed to pass security scans with a low risk score.
 
-## Usage
-This is a test skill and should not be used in production.
+- Validate security scanners work correctly
+- Provide a baseline "clean" skill
+- Test the scanning workflow
 
-## Functions
-- Basic string manipulation
-- Safe file reading operations
-- Standard logging
+## Implementation
 
-## Safety
-This skill contains no security vulnerabilities or malicious code patterns.
+Simple, safe code with no external calls or security risks.
