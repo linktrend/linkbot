@@ -100,15 +100,15 @@ get_enabled_agents() {
 deploy_remote() {
     log_info "Deploying to remote: $DEPLOY_HOST:$DEPLOY_PATH"
     
-    # Step 1: Ensure monorepo exists on remote
+    # Step 1: Clone or pull monorepo on remote
     log_info "Step 1/6: Syncing monorepo to remote..."
-    ssh "$DEPLOY_HOST" "mkdir -p $DEPLOY_PATH"
-    rsync -av --delete \
-        --exclude='node_modules' \
-        --exclude='dist' \
-        --exclude='.git' \
-        --exclude='*.log' \
-        "$MONOREPO_ROOT/" "$DEPLOY_HOST:$DEPLOY_PATH/"
+    ssh "$DEPLOY_HOST" "
+        if [ -d $DEPLOY_PATH/.git ]; then
+            cd $DEPLOY_PATH && git pull origin main
+        else
+            git clone https://github.com/linktrend/linkbot.git $DEPLOY_PATH
+        fi
+    "
     log_success "Monorepo synced"
     
     # Step 2: Install dependencies on remote
