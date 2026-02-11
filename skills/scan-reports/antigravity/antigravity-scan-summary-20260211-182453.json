@@ -1,0 +1,90 @@
+{
+  "scan_session": {
+    "timestamp": "2026-02-11T10:31:40Z",
+    "source": "antigravity-kit",
+    "repository": "https://github.com/linktrend/antigravity-kit.git"
+  },
+  "statistics": {
+    "total_items": 57,
+    "scanned": 57,
+    "agents": {
+      "total": 20,
+      "approved": 20,
+      "rejected": 0
+    },
+    "skills": {
+      "total": 37,
+      "approved": 37,
+      "rejected": 0
+    },
+    "borderline": 0
+  },
+  "approved_items": [
+  "agent/backend-specialist",
+  "agent/code-archaeologist",
+  "agent/database-architect",
+  "agent/debugger",
+  "agent/devops-engineer",
+  "agent/documentation-writer",
+  "agent/explorer-agent",
+  "agent/frontend-specialist",
+  "agent/game-developer",
+  "agent/mobile-developer",
+  "agent/orchestrator",
+  "agent/penetration-tester",
+  "agent/performance-optimizer",
+  "agent/product-manager",
+  "agent/product-owner",
+  "agent/project-planner",
+  "agent/qa-automation-engineer",
+  "agent/security-auditor",
+  "agent/seo-specialist",
+  "agent/test-engineer",
+  "skill/api-patterns",
+  "skill/app-builder",
+  "skill/architecture",
+  "skill/bash-linux",
+  "skill/behavioral-modes",
+  "skill/brainstorming",
+  "skill/clean-code",
+  "skill/code-review-checklist",
+  "skill/database-design",
+  "skill/deployment-procedures",
+  "skill/documentation-templates",
+  "skill/frontend-design",
+  "skill/game-development",
+  "skill/geo-fundamentals",
+  "skill/i18n-localization",
+  "skill/intelligent-routing",
+  "skill/lint-and-validate",
+  "skill/mcp-builder",
+  "skill/mobile-design",
+  "skill/nextjs-react-expert",
+  "skill/nodejs-best-practices",
+  "skill/parallel-agents",
+  "skill/performance-profiling",
+  "skill/plan-writing",
+  "skill/powershell-windows",
+  "skill/python-patterns",
+  "skill/red-team-tactics",
+  "skill/rust-pro",
+  "skill/seo-fundamentals",
+  "skill/server-management",
+  "skill/systematic-debugging",
+  "skill/tailwind-patterns",
+  "skill/tdd-workflow",
+  "skill/testing-patterns",
+  "skill/vulnerability-scanner",
+  "skill/web-design-guidelines",
+  "skill/webapp-testing"
+],
+  "rejected_items": [
+  ""
+],
+  "borderline_items": [
+  ""
+],
+  "approval_rate": 100.0,
+  "cost_incurred": 0.00,
+  "reports_directory": "/Users/linktrend/Projects/LiNKbot/skills/scan-reports/antigravity"
+}

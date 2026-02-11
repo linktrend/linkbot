@@ -1,0 +1,503 @@
+{
+  "catalog_version": "1.0.0",
+  "last_updated": "2026-02-11T10:31:40Z",
+  "total_skills": 47,
+  "total_agents": 20,
+  "security_scanned": true,
+  "all_enabled": false,
+  
+  "skills": {
+    "shared": {
+      "gmail-integration": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Gmail API integration for email management"
+      },
+      "google-docs": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Google Docs API integration"
+      },
+      "google-sheets": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Google Sheets API integration"
+      }
+    },
+    
+    "coding": {
+      "python-coding": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Python code generation and execution"
+      },
+      "typescript-coding": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "TypeScript code generation"
+      }
+    },
+    
+    "specialized": {
+      "document-generator": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Automated document generation"
+      },
+      "financial-calculator": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "business",
+        "description": "Financial calculations and analysis"
+      },
+      "meeting-scheduler": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Meeting scheduling automation"
+      },
+      "task-management": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Task and project management"
+      }
+    },
+    
+    "antigravity": {
+      "api-patterns": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "RESTful API design patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "app-builder": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Application scaffolding",
+        "source": "google-labs-antigravity-kit"
+      },
+      "architecture": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "Software architecture patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "bash-linux": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Bash scripting & Linux",
+        "source": "google-labs-antigravity-kit"
+      },
+      "behavioral-modes": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "ai",
+        "description": "AI behavior modes",
+        "source": "google-labs-antigravity-kit"
+      },
+      "brainstorming": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Ideation techniques",
+        "source": "google-labs-antigravity-kit"
+      },
+      "clean-code": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Clean code principles",
+        "source": "google-labs-antigravity-kit"
+      },
+      "code-review-checklist": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Code review standards",
+        "source": "google-labs-antigravity-kit"
+      },
+      "database-design": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "Database schema design",
+        "source": "google-labs-antigravity-kit"
+      },
+      "deployment-procedures": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "devops",
+        "description": "Deployment workflows",
+        "source": "google-labs-antigravity-kit"
+      },
+      "documentation-templates": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "documentation",
+        "description": "Documentation standards",
+        "source": "google-labs-antigravity-kit"
+      },
+      "frontend-design": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "frontend",
+        "description": "UI/UX design patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "game-development": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Game development patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "geo-fundamentals": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "specialized",
+        "description": "Geospatial programming",
+        "source": "google-labs-antigravity-kit"
+      },
+      "i18n-localization": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Internationalization",
+        "source": "google-labs-antigravity-kit"
+      },
+      "intelligent-routing": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "Request routing strategies",
+        "source": "google-labs-antigravity-kit"
+      },
+      "lint-and-validate": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Code linting & validation",
+        "source": "google-labs-antigravity-kit"
+      },
+      "mcp-builder": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "MCP server development",
+        "source": "google-labs-antigravity-kit"
+      },
+      "mobile-design": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "mobile",
+        "description": "Mobile UI/UX patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "nextjs-react-expert": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "frontend",
+        "description": "Next.js & React expertise",
+        "source": "google-labs-antigravity-kit"
+      },
+      "nodejs-best-practices": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Node.js best practices",
+        "source": "google-labs-antigravity-kit"
+      },
+      "parallel-agents": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "ai",
+        "description": "Multi-agent workflows",
+        "source": "google-labs-antigravity-kit"
+      },
+      "performance-profiling": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Performance analysis",
+        "source": "google-labs-antigravity-kit"
+      },
+      "plan-writing": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "productivity",
+        "description": "Project planning",
+        "source": "google-labs-antigravity-kit"
+      },
+      "powershell-windows": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "PowerShell scripting",
+        "source": "google-labs-antigravity-kit"
+      },
+      "python-patterns": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Python design patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "red-team-tactics": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "security",
+        "description": "Security testing tactics",
+        "source": "google-labs-antigravity-kit"
+      },
+      "rust-pro": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Rust programming",
+        "source": "google-labs-antigravity-kit"
+      },
+      "seo-fundamentals": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "marketing",
+        "description": "SEO optimization",
+        "source": "google-labs-antigravity-kit"
+      },
+      "server-management": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "devops",
+        "description": "Server administration",
+        "source": "google-labs-antigravity-kit"
+      },
+      "systematic-debugging": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Debugging methodologies",
+        "source": "google-labs-antigravity-kit"
+      },
+      "tailwind-patterns": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "frontend",
+        "description": "Tailwind CSS patterns",
+        "source": "google-labs-antigravity-kit"
+      },
+      "tdd-workflow": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Test-driven development",
+        "source": "google-labs-antigravity-kit"
+      },
+      "testing-patterns": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Testing strategies",
+        "source": "google-labs-antigravity-kit"
+      },
+      "vulnerability-scanner": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "security",
+        "description": "Vulnerability detection",
+        "source": "google-labs-antigravity-kit"
+      },
+      "web-design-guidelines": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "frontend",
+        "description": "Web design standards",
+        "source": "google-labs-antigravity-kit"
+      },
+      "webapp-testing": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Web app testing",
+        "source": "google-labs-antigravity-kit"
+      }
+    }
+  },
+  
+  "agents": {
+    "antigravity": {
+      "backend-specialist": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Backend development expert",
+        "source": "google-labs-antigravity-kit"
+      },
+      "code-archaeologist": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "analysis",
+        "description": "Code analysis & legacy systems",
+        "source": "google-labs-antigravity-kit"
+      },
+      "database-architect": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "Database design & optimization",
+        "source": "google-labs-antigravity-kit"
+      },
+      "debugger": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Systematic debugging specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "devops-engineer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "devops",
+        "description": "DevOps & infrastructure",
+        "source": "google-labs-antigravity-kit"
+      },
+      "documentation-writer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "documentation",
+        "description": "Technical documentation specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "explorer-agent": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "analysis",
+        "description": "Codebase exploration specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "frontend-specialist": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Frontend development specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "game-developer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "Game development specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "mobile-developer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "development",
+        "description": "iOS & Android development",
+        "source": "google-labs-antigravity-kit"
+      },
+      "orchestrator": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "architecture",
+        "description": "Multi-agent orchestration",
+        "source": "google-labs-antigravity-kit"
+      },
+      "penetration-tester": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "security",
+        "description": "Penetration testing specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "performance-optimizer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Performance optimization specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "product-manager": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "management",
+        "description": "Product management specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "product-owner": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "management",
+        "description": "Product ownership specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "project-planner": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "management",
+        "description": "Project planning specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "qa-automation-engineer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "QA automation specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "security-auditor": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "security",
+        "description": "Security auditing specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "seo-specialist": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "marketing",
+        "description": "SEO optimization specialist",
+        "source": "google-labs-antigravity-kit"
+      },
+      "test-engineer": {
+        "enabled": false,
+        "risk_score": 0,
+        "category": "quality",
+        "description": "Testing specialist",
+        "source": "google-labs-antigravity-kit"
+      }
+    }
+  },
+  
+  "usage_instructions": {
+    "how_to_enable": "Copy desired skills/agents to bots/<bot>/config/<bot>/openclaw.json and set enabled: true",
+    "example": {
+      "skills": {
+        "antigravity/api-patterns": { "enabled": true },
+        "shared/gmail-integration": { "enabled": true }
+      },
+      "agents": {
+        "antigravity/frontend-specialist": { "enabled": true }
+      }
+    }
+  },
+  
+  "security_summary": {
+    "scan_date": "2026-02-11",
+    "total_items_scanned": 67,
+    "approved": 67,
+    "rejected": 0,
+    "borderline": 0,
+    "approval_rate": "100%",
+    "cost": "$0.00"
+  }
+}
