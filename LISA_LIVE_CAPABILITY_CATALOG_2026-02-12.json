@@ -1,28 +1,42 @@
 {
-  "catalog_version": "2.0.0-live-runtime",
-  "generated_at": "2026-02-12",
+  "catalog_version": "2.1.0-live-runtime",
+  "generated_at": "2026-02-12T08:24:53.165796+00:00",
   "authoritative_runtime": "/root/.openclaw/openclaw.json",
+  "runtime_host": "178.128.77.125",
   "summary": {
-    "skills_total_registered": 122,
-    "skills_enabled_and_configured": 78,
-    "skills_disabled_but_installed": 1,
-    "skills_installed_but_unavailable_missing_prereqs": 43,
-    "agents_total_listed": 21,
-    "agents_enabled_and_configured": 1,
-    "agents_installed_but_disabled": 20,
+    "skills_total_runtime": 107,
+    "skills_enabled": 88,
+    "skills_disabled_but_installed": 19,
+    "skills_enabled_and_configured": 55,
+    "skills_unavailable_or_blocked": 33,
+    "agents_total_listed": 22,
+    "agents_enabled_and_configured": 6,
+    "agents_installed_but_disabled": 16,
     "mcp_total_listed": 5,
     "mcp_enabled_and_configured": 5
   },
   "mcp_servers": [
     {
+      "name": "gmail-integration",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
+      "description": "Access Gmail and Calendar actions through mcporter and the gmail-integration MCP server.",
+      "example": "Lisa, use \"gmail-integration\" to help with this task.",
+      "verification": "mcporter list status=\"ok\" on VPS (2026-02-12).",
+      "tools_count": 19
+    },
+    {
       "name": "google-docs",
       "enabled": true,
       "installed": true,
       "configured": true,
       "status": "enabled_and_configured",
-      "description": "Create and edit Google Docs from Lisa.",
-      "example": "Lisa, create a Google Doc called Weekly Update and add notes.",
-      "verification": "mcporter schema and live tool call succeeded on VPS (2026-02-12)."
+      "description": "Create, read, and edit Google Docs content through mcporter and the google-docs MCP server.",
+      "example": "Lisa, use \"google-docs\" to help with this task.",
+      "verification": "mcporter list status=\"ok\" on VPS (2026-02-12).",
+      "tools_count": 44
     },
     {
       "name": "google-sheets",
@@ -30,9 +44,10 @@
       "installed": true,
       "configured": true,
       "status": "enabled_and_configured",
-      "description": "Create and update Google Sheets from Lisa.",
-      "example": "Lisa, create a sheet called Sales Tracker and add today's numbers.",
-      "verification": "Auth fixed and create_spreadsheet call succeeded on VPS (2026-02-12)."
+      "description": "Read and update Google Sheets through mcporter and the google-sheets MCP server.",
+      "example": "Lisa, use \"google-sheets\" to help with this task.",
+      "verification": "mcporter list status=\"ok\" on VPS (2026-02-12).",
+      "tools_count": 19
     },
     {
       "name": "google-slides",
@@ -40,19 +55,10 @@
       "installed": true,
       "configured": true,
       "status": "enabled_and_configured",
-      "description": "Create and modify Google Slides presentations from Lisa.",
-      "example": "Lisa, create a presentation titled Q1 Plan.",
-      "verification": "create_presentation call and agent flow succeeded on VPS (2026-02-12)."
-    },
-    {
-      "name": "gmail-integration",
-      "enabled": true,
-      "installed": true,
-      "configured": true,
-      "status": "enabled_and_configured",
-      "description": "Read email/calendar and send outbound email from Lisa.",
-      "example": "Lisa, send the document link to info@linktrend.media.",
-      "verification": "Auth check and send_new_email succeeded on VPS (2026-02-12)."
+      "description": "Create and edit Google Slides presentations through mcporter and the google-slides MCP server.",
+      "example": "Lisa, use \"google-slides\" to help with this task.",
+      "verification": "mcporter list status=\"ok\" on VPS (2026-02-12).",
+      "tools_count": 5
     },
     {
       "name": "web-research",
@@ -60,1813 +66,2657 @@
       "installed": true,
       "configured": true,
       "status": "enabled_and_configured",
-      "description": "Brave web search MCP for research queries.",
-      "example": "Lisa, research top AI automation competitors and summarize.",
-      "verification": "Schema and brave_web_search call succeeded on VPS (2026-02-12)."
+      "description": "Run Brave-powered web, image, video, and news research through mcporter.",
+      "example": "Lisa, use \"web-research\" to help with this task.",
+      "verification": "mcporter list status=\"ok\" on VPS (2026-02-12).",
+      "tools_count": 6
     }
   ],
   "agents": [
     {
-      "name": "main",
-      "installed": true,
+      "id": "main",
       "enabled": true,
+      "installed_in_repo": false,
+      "installed_in_runtime": true,
       "configured": true,
       "status": "enabled_and_configured",
-      "description": "Lisa main runtime agent for chat and orchestration.",
-      "example": "Lisa, summarize my priorities for today.",
-      "notes": "Model: openrouter/moonshotai/kimi-k2.5"
+      "description": "Lisa runtime agent: main",
+      "example": "Lisa, use the \"main\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": null
     },
     {
-      "name": "backend-specialist",
-      "installed": true,
+      "id": "README",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
+      "configured": false,
+      "status": "installed_but_disabled",
+      "description": "Agent persona available: README",
+      "example": "Lisa, use the \"README\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/README.md"
+    },
+    {
+      "id": "backend-specialist",
+      "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert backend architect for Node.js, Python, and modern serverless/edge systems. Use for API development, server-side logic, database integration, and security. Triggers on backend, server, api, endpoint, database, auth.",
-      "example": "Lisa, use the backend-specialist agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"backend-specialist\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/backend-specialist.md"
     },
     {
-      "name": "code-archaeologist",
-      "installed": true,
+      "id": "code-archaeologist",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in legacy code, refactoring, and understanding undocumented systems. Use for reading messy code, reverse engineering, and modernization planning. Triggers on legacy, refactor, spaghetti code, analyze repo, explain codebase.",
-      "example": "Lisa, use the code-archaeologist agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"code-archaeologist\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/code-archaeologist.md"
     },
     {
-      "name": "database-architect",
-      "installed": true,
+      "id": "database-architect",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert database architect for schema design, query optimization, migrations, and modern serverless databases. Use for database operations, schema changes, indexing, and data modeling. Triggers on database, sql, schema, migration, query, postgres, index, table.",
-      "example": "Lisa, use the database-architect agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"database-architect\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/database-architect.md"
     },
     {
-      "name": "debugger",
-      "installed": true,
+      "id": "debugger",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in systematic debugging, root cause analysis, and crash investigation. Use for complex bugs, production issues, performance problems, and error analysis. Triggers on bug, error, crash, not working, broken, investigate, fix.",
-      "example": "Lisa, use the debugger agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"debugger\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/debugger.md"
     },
     {
-      "name": "devops-engineer",
-      "installed": true,
+      "id": "devops-engineer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in deployment, server management, CI/CD, and production operations. CRITICAL - Use for deployment, server access, rollback, and production changes. HIGH RISK operations. Triggers on deploy, production, server, pm2, ssh, release, rollback, ci/cd.",
-      "example": "Lisa, use the devops-engineer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"devops-engineer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/devops-engineer.md"
     },
     {
-      "name": "documentation-writer",
-      "installed": true,
+      "id": "documentation-writer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in technical documentation. Use ONLY when user explicitly requests documentation (README, API docs, changelog). DO NOT auto-invoke during normal development.",
-      "example": "Lisa, use the documentation-writer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"documentation-writer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/documentation-writer.md"
     },
     {
-      "name": "explorer-agent",
-      "installed": true,
-      "enabled": false,
-      "configured": false,
-      "status": "installed_but_disabled",
+      "id": "explorer-agent",
+      "enabled": true,
+      "installed_in_repo": true,
+      "installed_in_runtime": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Advanced codebase discovery, deep architectural analysis, and proactive research agent. The eyes and ears of the framework. Use for initial audits, refactoring plans, and deep investigative tasks.",
-      "example": "Lisa, use the explorer-agent agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"explorer-agent\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace-explorer-agent",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": "agents/antigravity/explorer-agent.md"
     },
     {
-      "name": "frontend-specialist",
-      "installed": true,
+      "id": "frontend-specialist",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Senior Frontend Architect who builds maintainable React/Next.js systems with performance-first mindset. Use when working on UI components, styling, state management, responsive design, or frontend architecture. Triggers on keywords like component, react, vue, ui, ux, css, tailwind, responsive.",
-      "example": "Lisa, use the frontend-specialist agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"frontend-specialist\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/frontend-specialist.md"
     },
     {
-      "name": "game-developer",
-      "installed": true,
+      "id": "game-developer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Game development across all platforms (PC, Web, Mobile, VR/AR). Use when building games with Unity, Godot, Unreal, Phaser, Three.js, or any game engine. Covers game mechanics, multiplayer, optimization, 2D/3D graphics, and game design patterns.",
-      "example": "Lisa, use the game-developer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"game-developer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/game-developer.md"
     },
     {
-      "name": "mobile-developer",
-      "installed": true,
+      "id": "mobile-developer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in React Native and Flutter mobile development. Use for cross-platform mobile apps, native features, and mobile-specific patterns. Triggers on mobile, react native, flutter, ios, android, app store, expo.",
-      "example": "Lisa, use the mobile-developer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"mobile-developer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/mobile-developer.md"
     },
     {
-      "name": "orchestrator",
-      "installed": true,
-      "enabled": false,
-      "configured": false,
-      "status": "installed_but_disabled",
+      "id": "orchestrator",
+      "enabled": true,
+      "installed_in_repo": true,
+      "installed_in_runtime": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Multi-agent coordination and task orchestration. Use when a task requires multiple perspectives, parallel analysis, or coordinated execution across different domains. Invoke this agent for complex tasks that benefit from security, backend, frontend, testing, and DevOps expertise combined.",
-      "example": "Lisa, use the orchestrator agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"orchestrator\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace-orchestrator",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": "agents/antigravity/orchestrator.md"
     },
     {
-      "name": "penetration-tester",
-      "installed": true,
+      "id": "penetration-tester",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in offensive security, penetration testing, red team operations, and vulnerability exploitation. Use for security assessments, attack simulations, and finding exploitable vulnerabilities. Triggers on pentest, exploit, attack, hack, breach, pwn, redteam, offensive.",
-      "example": "Lisa, use the penetration-tester agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"penetration-tester\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/penetration-tester.md"
     },
     {
-      "name": "performance-optimizer",
-      "installed": true,
+      "id": "performance-optimizer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in performance optimization, profiling, Core Web Vitals, and bundle optimization. Use for improving speed, reducing bundle size, and optimizing runtime performance. Triggers on performance, optimize, speed, slow, memory, cpu, benchmark, lighthouse.",
-      "example": "Lisa, use the performance-optimizer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"performance-optimizer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/performance-optimizer.md"
     },
     {
-      "name": "product-manager",
-      "installed": true,
-      "enabled": false,
-      "configured": false,
-      "status": "installed_but_disabled",
+      "id": "product-manager",
+      "enabled": true,
+      "installed_in_repo": true,
+      "installed_in_runtime": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Expert in product requirements, user stories, and acceptance criteria. Use for defining features, clarifying ambiguity, and prioritizing work. Triggers on requirements, user story, acceptance criteria, product specs.",
-      "example": "Lisa, use the product-manager agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"product-manager\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace-product-manager",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": "agents/antigravity/product-manager.md"
     },
     {
-      "name": "product-owner",
-      "installed": true,
-      "enabled": false,
-      "configured": false,
-      "status": "installed_but_disabled",
+      "id": "product-owner",
+      "enabled": true,
+      "installed_in_repo": true,
+      "installed_in_runtime": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Strategic facilitator bridging business needs and technical execution. Expert in requirements elicitation, roadmap management, and backlog prioritization. Triggers on requirements, user story, backlog, MVP, PRD, stakeholder.",
-      "example": "Lisa, use the product-owner agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"product-owner\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace-product-owner",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": "agents/antigravity/product-owner.md"
     },
     {
-      "name": "project-planner",
-      "installed": true,
-      "enabled": false,
-      "configured": false,
-      "status": "installed_but_disabled",
+      "id": "project-planner",
+      "enabled": true,
+      "installed_in_repo": true,
+      "installed_in_runtime": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Smart project planning agent. Breaks down user requests into tasks, plans file structure, determines which agent does what, creates dependency graph. Use when starting new projects or planning major features.",
-      "example": "Lisa, use the project-planner agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"project-planner\" agent for this task.",
+      "workspace": "/root/.openclaw/workspace-project-planner",
+      "model": "openrouter/moonshotai/kimi-k2.5",
+      "repo_path": "agents/antigravity/project-planner.md"
     },
     {
-      "name": "qa-automation-engineer",
-      "installed": true,
+      "id": "qa-automation-engineer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Specialist in test automation infrastructure and E2E testing. Focuses on Playwright, Cypress, CI pipelines, and breaking the system. Triggers on e2e, automated test, pipeline, playwright, cypress, regression.",
-      "example": "Lisa, use the qa-automation-engineer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"qa-automation-engineer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/qa-automation-engineer.md"
     },
     {
-      "name": "security-auditor",
-      "installed": true,
+      "id": "security-auditor",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Elite cybersecurity expert. Think like an attacker, defend like an expert. OWASP 2025, supply chain security, zero trust architecture. Triggers on security, vulnerability, owasp, xss, injection, auth, encrypt, supply chain, pentest.",
-      "example": "Lisa, use the security-auditor agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"security-auditor\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/security-auditor.md"
     },
     {
-      "name": "seo-specialist",
-      "installed": true,
+      "id": "seo-specialist",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "SEO and GEO (Generative Engine Optimization) expert. Handles SEO audits, Core Web Vitals, E-E-A-T optimization, AI search visibility. Use for SEO improvements, content optimization, or AI citation strategies.",
-      "example": "Lisa, use the seo-specialist agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"seo-specialist\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/seo-specialist.md"
     },
     {
-      "name": "test-engineer",
-      "installed": true,
+      "id": "test-engineer",
       "enabled": false,
+      "installed_in_repo": true,
+      "installed_in_runtime": false,
       "configured": false,
       "status": "installed_but_disabled",
       "description": "Expert in testing, TDD, and test automation. Use for writing tests, improving coverage, debugging test failures. Triggers on test, spec, coverage, jest, pytest, playwright, e2e, unit test.",
-      "example": "Lisa, use the test-engineer agent for this specialist task.",
-      "notes": "Installed in repo but not enabled in live Lisa config."
+      "example": "Lisa, use the \"test-engineer\" agent for this task.",
+      "workspace": null,
+      "model": null,
+      "repo_path": "agents/antigravity/test-engineer.md"
     }
   ],
   "skills": [
     {
       "name": "1password",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+      "example": "Lisa, use \"1password\" for this task.",
+      "emoji": "\ud83d\udd10",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: op",
-      "example": "Lisa, use 1password for this task."
+      "homepage": "https://developer.1password.com/docs/cli/get-started/",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "op"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "2d-games",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "2D game development principles. Sprites, tilemaps, physics, camera.",
+      "example": "Lisa, use \"2d-games\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use 2d-games for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "3d-games",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "3D game development principles. Rendering, shaders, physics, cameras.",
+      "example": "Lisa, use \"3d-games\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use 3d-games for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "api-patterns",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "API design principles and decision-making. REST vs GraphQL vs tRPC selection, response formats, versioning, pagination.",
+      "example": "Lisa, use \"api-patterns\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use api-patterns for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "app-builder",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Main application building orchestrator. Creates full-stack applications from natural language requests. Determines project type, selects tech stack, coordinates agents.",
+      "example": "Lisa, use \"app-builder\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use app-builder for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "apple-notes",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks OpenClaw to add a note, list notes, search notes, or manage note folders.",
+      "example": "Lisa, use \"apple-notes\" for this task.",
+      "emoji": "\ud83d\udcdd",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: memo; os: darwin",
-      "example": "Lisa, use apple-notes for this task."
+      "homepage": "https://github.com/antoniorodr/memo",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "memo"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "apple-reminders",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+      "example": "Lisa, use \"apple-reminders\" for this task.",
+      "emoji": "\u23f0",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: remindctl; os: darwin",
-      "example": "Lisa, use apple-reminders for this task."
+      "homepage": "https://github.com/steipete/remindctl",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "remindctl"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "architecture",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Architectural decision-making framework. Requirements analysis, trade-off evaluation, ADR documentation. Use when making architecture decisions or analyzing system design.",
+      "example": "Lisa, use \"architecture\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use architecture for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "bash-linux",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Bash/Linux terminal patterns. Critical commands, piping, error handling, scripting. Use when working on macOS or Linux systems.",
+      "example": "Lisa, use \"bash-linux\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use bash-linux for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "bear-notes",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Create, search, and manage Bear notes via grizzly CLI.",
+      "example": "Lisa, use \"bear-notes\" for this task.",
+      "emoji": "\ud83d\udc3b",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: grizzly; os: darwin",
-      "example": "Lisa, use bear-notes for this task."
+      "homepage": "https://bear.app",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "grizzly"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "behavioral-modes",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "AI operational modes (brainstorm, implement, debug, review, teach, ship, orchestrate). Use to adapt behavior based on task type.",
+      "example": "Lisa, use \"behavioral-modes\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use behavioral-modes for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "blogwatcher",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+      "example": "Lisa, use \"blogwatcher\" for this task.",
+      "emoji": "\ud83d\udcf0",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: blogwatcher",
-      "example": "Lisa, use blogwatcher for this task."
+      "homepage": "https://github.com/Hyaxia/blogwatcher",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "blogwatcher"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "blucli",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+      "example": "Lisa, use \"blucli\" for this task.",
+      "emoji": "\ud83e\uded0",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: blu",
-      "example": "Lisa, use blucli for this task."
+      "homepage": "https://blucli.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "blu"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "bluebubbles",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Use when you need to send or manage iMessages via BlueBubbles (recommended iMessage integration). Calls go through the generic message tool with channel=\"bluebubbles\".",
+      "example": "Lisa, use \"bluebubbles\" for this task.",
+      "emoji": "\ud83e\udee7",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "config: channels.bluebubbles",
-      "example": "Lisa, use bluebubbles for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [
+          "channels.bluebubbles"
+        ],
+        "os": []
+      }
     },
     {
       "name": "brainstorming",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Socratic questioning protocol + user communication. MANDATORY for complex requests, new features, or unclear requirements. Includes progress reporting and error handling.",
+      "example": "Lisa, use \"brainstorming\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use brainstorming for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "camsnap",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Capture frames or clips from RTSP/ONVIF cameras.",
+      "example": "Lisa, use \"camsnap\" for this task.",
+      "emoji": "\ud83d\udcf8",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: camsnap",
-      "example": "Lisa, use camsnap for this task."
+      "homepage": "https://camsnap.ai",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "camsnap"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "clawhub",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+      "example": "Lisa, use \"clawhub\" for this task.",
+      "emoji": null,
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: clawhub",
-      "example": "Lisa, use clawhub for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "clawhub"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "clean-code",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Pragmatic coding standards - concise, direct, no over-engineering, no unnecessary comments",
+      "example": "Lisa, use \"clean-code\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use clean-code for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "code-review-checklist",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Code review guidelines covering code quality, security, and best practices.",
+      "example": "Lisa, use \"code-review-checklist\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use code-review-checklist for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "coding-agent",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+      "example": "Lisa, use \"coding-agent\" for this task.",
+      "emoji": "\ud83e\udde9",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "anyBins: claude, codex, opencode, pi",
-      "example": "Lisa, use coding-agent for this task."
-    },
-    {
-      "name": "config-analyzer",
-      "description": "Analyze configuration files for validation and best practices",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use config-analyzer for this task."
-    },
-    {
-      "name": "data-analyzer",
-      "description": "Analyze data efficiently",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use data-analyzer for this task."
-    },
-    {
-      "name": "data-exfiltrator",
-      "description": "Analyzes data files",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use data-exfiltrator for this task."
-    },
-    {
-      "name": "data-processor",
-      "description": "Process data with custom algorithms",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use data-processor for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [
+          "claude",
+          "codex",
+          "opencode",
+          "pi"
+        ],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "database-design",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Database design principles and decision-making. Schema design, indexing strategy, ORM selection, serverless databases.",
+      "example": "Lisa, use \"database-design\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use database-design for this task."
-    },
-    {
-      "name": "database-query",
-      "description": "Query database safely with parameterized statements",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use database-query for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "deployment-procedures",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Production deployment principles and decision-making. Safe deployment workflows, rollback strategies, and verification. Teaches thinking, not scripts.",
+      "example": "Lisa, use \"deployment-procedures\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use deployment-procedures for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "document-generator",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Create, edit, and analyze professional documents including Word (.docx), Excel (.xlsx), PowerPoint (.pptx), and PDF files. Supports templates, reports, forms, and complex formatting.",
+      "example": "Lisa, use \"document-generator\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use document-generator for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "documentation-templates",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Documentation templates and structure guidelines. README, API docs, code comments, and AI-friendly documentation.",
+      "example": "Lisa, use \"documentation-templates\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use documentation-templates for this task."
-    },
-    {
-      "name": "eicar-test",
-      "description": "Test skill containing EICAR test file for malware detection",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use eicar-test for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "eightctl",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+      "example": "Lisa, use \"eightctl\" for this task.",
+      "emoji": "\ud83c\udf9b\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: eightctl",
-      "example": "Lisa, use eightctl for this task."
-    },
-    {
-      "name": "environment-secrets-exfiltrator",
-      "description": "Get system information for diagnostics",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use environment-secrets-exfiltrator for this task."
-    },
-    {
-      "name": "file-validator",
-      "description": "Validate file formats and content safely",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use file-validator for this task."
+      "homepage": "https://eightctl.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "eightctl"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "financial-calculator",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Advanced financial calculations skill for ROI analysis, budget planning, financial projections, investment analysis, and business financial modeling. Supports NPV, IRR, payback period, and cash flow analysis.",
+      "example": "Lisa, use \"financial-calculator\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use financial-calculator for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "frontend-design",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Design thinking and decision-making for web UI. Use when designing components, layouts, color schemes, typography, or creating aesthetic interfaces. Teaches principles, not fixed values.",
+      "example": "Lisa, use \"frontend-design\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use frontend-design for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "game-art",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Game art principles. Visual style selection, asset pipeline, animation workflow.",
+      "example": "Lisa, use \"game-art\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use game-art for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "game-audio",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Game audio principles. Sound design, music integration, adaptive audio systems.",
+      "example": "Lisa, use \"game-audio\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use game-audio for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "game-design",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Game design principles. GDD structure, balancing, player psychology, progression.",
+      "example": "Lisa, use \"game-design\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use game-design for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "game-development",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Game development orchestrator. Routes to platform-specific skills based on project needs.",
+      "example": "Lisa, use \"game-development\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use game-development for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "gemini",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+      "example": "Lisa, use \"gemini\" for this task.",
+      "emoji": "\u264a\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: gemini",
-      "example": "Lisa, use gemini for this task."
+      "homepage": "https://ai.google.dev/",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "gemini"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "geo-fundamentals",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Generative Engine Optimization for AI search engines (ChatGPT, Claude, Perplexity).",
+      "example": "Lisa, use \"geo-fundamentals\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use geo-fundamentals for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "gifgrep",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+      "example": "Lisa, use \"gifgrep\" for this task.",
+      "emoji": "\ud83e\uddf2",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: gifgrep",
-      "example": "Lisa, use gifgrep for this task."
+      "homepage": "https://gifgrep.com",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "gifgrep"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "github",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+      "example": "Lisa, use \"github\" for this task.",
+      "emoji": "\ud83d\udc19",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: gh",
-      "example": "Lisa, use github for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "gh"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "gmail-integration",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Access Gmail and Calendar actions through mcporter and the gmail-integration MCP server.",
+      "example": "Lisa, use \"gmail-integration\" for this task.",
+      "emoji": "\ud83d\udcec",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use gmail-integration for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "gog",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+      "example": "Lisa, use \"gog\" for this task.",
+      "emoji": "\ud83c\udfae",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "disabled_but_installed",
-      "missing_prerequisites": "bins: gog",
-      "example": "Lisa, use gog for this task."
+      "homepage": "https://gogcli.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "gog"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "google-docs",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Create, read, and edit Google Docs content through mcporter and the google-docs MCP server.",
+      "example": "Lisa, use \"google-docs\" for this task.",
+      "emoji": "\ud83d\udcdd",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use google-docs for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "google-docs-mcp",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Create, read, write, and format Google Docs using the MCP server",
+      "example": "Lisa, use \"google-docs-mcp\" for this task.",
+      "emoji": "\ud83d\udcdd",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use google-docs-mcp for this task."
+      "homepage": "https://github.com/a-bonus/google-docs-mcp",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "google-sheets",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Read and update Google Sheets through mcporter and the google-sheets MCP server.",
+      "example": "Lisa, use \"google-sheets\" for this task.",
+      "emoji": "\ud83d\udcca",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use google-sheets for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "google-slides",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Create and edit Google Slides presentations through mcporter and the google-slides MCP server.",
+      "example": "Lisa, use \"google-slides\" for this task.",
+      "emoji": "\ud83d\udcfd\ufe0f",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use google-slides for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "goplaces",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.",
+      "example": "Lisa, use \"goplaces\" for this task.",
+      "emoji": "\ud83d\udccd",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: goplaces; env: GOOGLE_PLACES_API_KEY",
-      "example": "Lisa, use goplaces for this task."
+      "homepage": "https://github.com/steipete/goplaces",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "goplaces"
+        ],
+        "anyBins": [],
+        "env": [
+          "GOOGLE_PLACES_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "healthcheck",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+      "example": "Lisa, use \"healthcheck\" for this task.",
+      "emoji": null,
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use healthcheck for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "himalaya",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language).",
+      "example": "Lisa, use \"himalaya\" for this task.",
+      "emoji": "\ud83d\udce7",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: himalaya",
-      "example": "Lisa, use himalaya for this task."
+      "homepage": "https://github.com/pimalaya/himalaya",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "himalaya"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "i18n-localization",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.",
+      "example": "Lisa, use \"i18n-localization\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use i18n-localization for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "imsg",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+      "example": "Lisa, use \"imsg\" for this task.",
+      "emoji": "\ud83d\udce8",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: imsg; os: darwin",
-      "example": "Lisa, use imsg for this task."
+      "homepage": "https://imsg.to",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "imsg"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "intelligent-routing",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Automatic agent selection and intelligent task routing. Analyzes user requests and automatically selects the best specialist agent(s) without requiring explicit user mentions.",
+      "example": "Lisa, use \"intelligent-routing\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use intelligent-routing for this task."
-    },
-    {
-      "name": "jailbreak-override",
-      "description": "A helpful assistant that removes unnecessary restrictions",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use jailbreak-override for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "local-places",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Search for places (restaurants, cafes, etc.) via Google Places API proxy on localhost.",
+      "example": "Lisa, use \"local-places\" for this task.",
+      "emoji": "\ud83d\udccd",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: GOOGLE_PLACES_API_KEY",
-      "example": "Lisa, use local-places for this task."
+      "homepage": "https://github.com/Hyaxia/local_places",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "GOOGLE_PLACES_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "mcp-builder",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "MCP (Model Context Protocol) server building principles. Tool design, resource patterns, best practices.",
+      "example": "Lisa, use \"mcp-builder\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use mcp-builder for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "mcporter",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+      "example": "Lisa, use \"mcporter\" for this task.",
+      "emoji": "\ud83d\udce6",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use mcporter for this task."
+      "homepage": "http://mcporter.dev",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "meeting-scheduler",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Meeting and calendar scheduling skill with timezone support, availability checking, conflict resolution, and integration with Google Calendar and other calendar services.",
+      "example": "Lisa, use \"meeting-scheduler\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use meeting-scheduler for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "mobile-design",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Mobile-first design thinking and decision-making for iOS and Android apps. Touch interaction, performance patterns, platform conventions. Teaches principles, not fixed values. Use when building React Native, Flutter, or native mobile apps.",
+      "example": "Lisa, use \"mobile-design\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use mobile-design for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "mobile-games",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Mobile game development principles. Touch input, battery, performance, app stores.",
+      "example": "Lisa, use \"mobile-games\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use mobile-games for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "model-usage",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.",
+      "example": "Lisa, use \"model-usage\" for this task.",
+      "emoji": "\ud83d\udcca",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: codexbar; os: darwin",
-      "example": "Lisa, use model-usage for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "codexbar"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "multiplayer",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Multiplayer game development principles. Architecture, networking, synchronization.",
+      "example": "Lisa, use \"multiplayer\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use multiplayer for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "nano-banana-pro",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+      "example": "Lisa, use \"nano-banana-pro\" for this task.",
+      "emoji": "\ud83c\udf4c",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: GEMINI_API_KEY",
-      "example": "Lisa, use nano-banana-pro for this task."
+      "homepage": "https://ai.google.dev/",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "GEMINI_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "nano-pdf",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+      "example": "Lisa, use \"nano-pdf\" for this task.",
+      "emoji": "\ud83d\udcc4",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: nano-pdf",
-      "example": "Lisa, use nano-pdf for this task."
+      "homepage": "https://pypi.org/project/nano-pdf/",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "nano-pdf"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "nodejs-best-practices",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Node.js development principles and decision-making. Framework selection, async patterns, security, and architecture. Teaches thinking, not copying.",
+      "example": "Lisa, use \"nodejs-best-practices\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use nodejs-best-practices for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "notion",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Notion API for creating and managing pages, databases, and blocks.",
+      "example": "Lisa, use \"notion\" for this task.",
+      "emoji": "\ud83d\udcdd",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: NOTION_API_KEY",
-      "example": "Lisa, use notion for this task."
+      "homepage": "https://developers.notion.com",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "NOTION_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "obsidian",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+      "example": "Lisa, use \"obsidian\" for this task.",
+      "emoji": "\ud83d\udc8e",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: obsidian-cli",
-      "example": "Lisa, use obsidian for this task."
+      "homepage": "https://help.obsidian.md",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "obsidian-cli"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "openai-image-gen",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Batch-generate images via OpenAI Images API. Random prompt sampler + `index.html` gallery.",
+      "example": "Lisa, use \"openai-image-gen\" for this task.",
+      "emoji": "\ud83d\uddbc\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: OPENAI_API_KEY",
-      "example": "Lisa, use openai-image-gen for this task."
+      "homepage": "https://platform.openai.com/docs/api-reference/images",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "openai-whisper",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Local speech-to-text with the Whisper CLI (no API key).",
+      "example": "Lisa, use \"openai-whisper\" for this task.",
+      "emoji": "\ud83c\udf99\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: whisper",
-      "example": "Lisa, use openai-whisper for this task."
+      "homepage": "https://openai.com/research/whisper",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "whisper"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "openai-whisper-api",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Transcribe audio via OpenAI Audio Transcriptions API (Whisper).",
+      "example": "Lisa, use \"openai-whisper-api\" for this task.",
+      "emoji": "\u2601\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: OPENAI_API_KEY",
-      "example": "Lisa, use openai-whisper-api for this task."
+      "homepage": "https://platform.openai.com/docs/guides/speech-to-text",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "openhue",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Control Philips Hue lights/scenes via the OpenHue CLI.",
+      "example": "Lisa, use \"openhue\" for this task.",
+      "emoji": "\ud83d\udca1",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: openhue",
-      "example": "Lisa, use openhue for this task."
+      "homepage": "https://www.openhue.io/cli",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "openhue"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "oracle",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+      "example": "Lisa, use \"oracle\" for this task.",
+      "emoji": "\ud83e\uddff",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: oracle",
-      "example": "Lisa, use oracle for this task."
+      "homepage": "https://askoracle.dev",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "oracle"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "ordercli",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+      "example": "Lisa, use \"ordercli\" for this task.",
+      "emoji": "\ud83d\udef5",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: ordercli",
-      "example": "Lisa, use ordercli for this task."
+      "homepage": "https://ordercli.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "ordercli"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "parallel-agents",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Multi-agent orchestration patterns. Use when multiple independent tasks can run with different domain expertise or when comprehensive analysis requires multiple perspectives.",
+      "example": "Lisa, use \"parallel-agents\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use parallel-agents for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "pc-games",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "PC and console game development principles. Engine selection, platform features, optimization strategies.",
+      "example": "Lisa, use \"pc-games\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use pc-games for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "peekaboo",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+      "example": "Lisa, use \"peekaboo\" for this task.",
+      "emoji": "\ud83d\udc40",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: peekaboo; os: darwin",
-      "example": "Lisa, use peekaboo for this task."
+      "homepage": "https://peekaboo.boo",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "peekaboo"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "performance-profiling",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Performance profiling principles. Measurement, analysis, and optimization techniques.",
+      "example": "Lisa, use \"performance-profiling\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use performance-profiling for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "plan-writing",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Structured task planning with clear breakdowns, dependencies, and verification criteria. Use when implementing features, refactoring, or any multi-step work.",
+      "example": "Lisa, use \"plan-writing\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use plan-writing for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "powershell-windows",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "PowerShell Windows patterns. Critical pitfalls, operator syntax, error handling.",
+      "example": "Lisa, use \"powershell-windows\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use powershell-windows for this task."
-    },
-    {
-      "name": "prompt-injection-test",
-      "description": "A test skill with prompt injection patterns",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use prompt-injection-test for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "python-coding",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Python coding skill for file operations, code generation, script creation, and data processing. Uses MCP filesystem server for secure file access.",
+      "example": "Lisa, use \"python-coding\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use python-coding for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "python-patterns",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Python development principles and decision-making. Framework selection, async patterns, type hints, project structure. Teaches thinking, not copying.",
+      "example": "Lisa, use \"python-patterns\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use python-patterns for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "react-best-practices",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.",
+      "example": "Lisa, use \"react-best-practices\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use react-best-practices for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "red-team-tactics",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Red team tactics principles based on MITRE ATT&CK. Attack phases, detection evasion, reporting.",
+      "example": "Lisa, use \"red-team-tactics\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use red-team-tactics for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "rust-pro",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Master Rust 1.75+ with modern async patterns, advanced type system features, and production-ready systems programming. Expert in the latest Rust ecosystem including Tokio, axum, and cutting-edge crates. Use PROACTIVELY for Rust development, performance optimization, or systems programming.",
+      "example": "Lisa, use \"rust-pro\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use rust-pro for this task."
-    },
-    {
-      "name": "safe-calculator",
-      "description": "A safe calculator for mathematical expressions",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use safe-calculator for this task."
-    },
-    {
-      "name": "safe-file-reader",
-      "description": "Read files from documents directory safely",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use safe-file-reader for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "sag",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "ElevenLabs text-to-speech with mac-style say UX.",
+      "example": "Lisa, use \"sag\" for this task.",
+      "emoji": "\ud83d\udde3\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: sag; env: ELEVENLABS_API_KEY",
-      "example": "Lisa, use sag for this task."
+      "homepage": "https://sag.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "sag"
+        ],
+        "anyBins": [],
+        "env": [
+          "ELEVENLABS_API_KEY"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "seo-fundamentals",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "SEO fundamentals, E-E-A-T, Core Web Vitals, and Google algorithm principles.",
+      "example": "Lisa, use \"seo-fundamentals\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use seo-fundamentals for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "server-management",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Server management principles and decision-making. Process management, monitoring strategy, and scaling decisions. Teaches thinking, not commands.",
+      "example": "Lisa, use \"server-management\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use server-management for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "session-logs",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Search and analyze your own session logs (older/parent conversations) using jq.",
+      "example": "Lisa, use \"session-logs\" for this task.",
+      "emoji": "\ud83d\udcdc",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: jq, rg",
-      "example": "Lisa, use session-logs for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "sherpa-onnx-tts",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+      "example": "Lisa, use \"sherpa-onnx-tts\" for this task.",
+      "emoji": "\ud83d\udde3\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "env: SHERPA_ONNX_RUNTIME_DIR, SHERPA_ONNX_MODEL_DIR",
-      "example": "Lisa, use sherpa-onnx-tts for this task."
-    },
-    {
-      "name": "simple-formatter",
-      "description": "Formats text according to specified style guidelines. A clean example skill with no security issues.",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use simple-formatter for this task."
-    },
-    {
-      "name": "simple-math",
-      "description": "Perform basic arithmetic operations safely using standard operators without eval or exec",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use simple-math for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "SHERPA_ONNX_RUNTIME_DIR",
+          "SHERPA_ONNX_MODEL_DIR"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "skill-creator",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+      "example": "Lisa, use \"skill-creator\" for this task.",
+      "emoji": null,
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use skill-creator for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "slack",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+      "example": "Lisa, use \"slack\" for this task.",
+      "emoji": "\ud83d\udcac",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "config: channels.slack",
-      "example": "Lisa, use slack for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [
+          "channels.slack"
+        ],
+        "os": []
+      }
     },
     {
       "name": "songsee",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+      "example": "Lisa, use \"songsee\" for this task.",
+      "emoji": "\ud83c\udf0a",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: songsee",
-      "example": "Lisa, use songsee for this task."
+      "homepage": "https://github.com/steipete/songsee",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "songsee"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "sonoscli",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Control Sonos speakers (discover/status/play/volume/group).",
+      "example": "Lisa, use \"sonoscli\" for this task.",
+      "emoji": "\ud83d\udd0a",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: sonos",
-      "example": "Lisa, use sonoscli for this task."
+      "homepage": "https://sonoscli.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "sonos"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "spotify-player",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+      "example": "Lisa, use \"spotify-player\" for this task.",
+      "emoji": "\ud83c\udfb5",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "anyBins: spogo, spotify_player",
-      "example": "Lisa, use spotify-player for this task."
+      "homepage": "https://www.spotify.com",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [
+          "spogo",
+          "spotify_player"
+        ],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "summarize",
-      "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
+      "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for \u201ctranscribe this YouTube/video\u201d).",
+      "example": "Lisa, use \"summarize\" for this task.",
+      "emoji": "\ud83e\uddfe",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: summarize",
-      "example": "Lisa, use summarize for this task."
+      "homepage": "https://summarize.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "systematic-debugging",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "4-phase systematic debugging methodology with root cause analysis and evidence-based verification. Use when debugging complex issues.",
+      "example": "Lisa, use \"systematic-debugging\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use systematic-debugging for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "tailwind-patterns",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns, design token architecture.",
+      "example": "Lisa, use \"tailwind-patterns\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use tailwind-patterns for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "tdd-workflow",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Test-Driven Development workflow principles. RED-GREEN-REFACTOR cycle.",
+      "example": "Lisa, use \"tdd-workflow\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use tdd-workflow for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "templates",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Project scaffolding templates for new applications. Use when creating new projects from scratch. Contains 12 templates for various tech stacks.",
+      "example": "Lisa, use \"templates\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use templates for this task."
-    },
-    {
-      "name": "Test Safe Skill",
-      "description": "A minimal test skill for security scanning validation",
-      "source": "openclaw-managed",
-      "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use Test Safe Skill for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "testing-patterns",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Testing patterns and principles. Unit, integration, mocking strategies.",
+      "example": "Lisa, use \"testing-patterns\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use testing-patterns for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "things-mac",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks OpenClaw to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.",
+      "example": "Lisa, use \"things-mac\" for this task.",
+      "emoji": "\u2705",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: things; os: darwin",
-      "example": "Lisa, use things-mac for this task."
+      "homepage": "https://github.com/ossianhempel/things3-cli",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "things"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": [
+          "darwin"
+        ]
+      }
     },
     {
       "name": "tmux",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
+      "example": "Lisa, use \"tmux\" for this task.",
+      "emoji": "\ud83e\uddf5",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use tmux for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "trello",
+      "enabled": true,
+      "installed": true,
+      "configured": false,
+      "status": "enabled_but_unavailable_missing_prereqs",
       "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+      "example": "Lisa, use \"trello\" for this task.",
+      "emoji": "\ud83d\udccb",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: jq; env: TRELLO_API_KEY, TRELLO_TOKEN",
-      "example": "Lisa, use trello for this task."
+      "homepage": "https://developer.atlassian.com/cloud/trello/rest/",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [
+          "TRELLO_API_KEY",
+          "TRELLO_TOKEN"
+        ],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "typescript-coding",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "TypeScript and JavaScript coding skill for web development, MCP server creation, Node.js applications, and frontend development. Includes React, Next.js, and modern tooling.",
+      "example": "Lisa, use \"typescript-coding\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use typescript-coding for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "video-frames",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Extract frames or short clips from videos using ffmpeg.",
+      "example": "Lisa, use \"video-frames\" for this task.",
+      "emoji": "\ud83c\udf9e\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: ffmpeg",
-      "example": "Lisa, use video-frames for this task."
+      "homepage": "https://ffmpeg.org",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "voice-call",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Start voice calls via the OpenClaw voice-call plugin.",
+      "example": "Lisa, use \"voice-call\" for this task.",
+      "emoji": "\ud83d\udcde",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "config: plugins.entries.voice-call.enabled",
-      "example": "Lisa, use voice-call for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [
+          "plugins.entries.voice-call.enabled"
+        ],
+        "os": []
+      }
     },
     {
       "name": "vr-ar",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "VR/AR development principles. Comfort, interaction, performance requirements.",
+      "example": "Lisa, use \"vr-ar\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use vr-ar for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "vulnerability-scanner",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Advanced vulnerability analysis principles. OWASP 2025, Supply Chain Security, attack surface mapping, risk prioritization.",
+      "example": "Lisa, use \"vulnerability-scanner\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use vulnerability-scanner for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "wacli",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Send WhatsApp messages to other people or search/sync WhatsApp history via the wacli CLI (not for normal user chats).",
+      "example": "Lisa, use \"wacli\" for this task.",
+      "emoji": "\ud83d\udcf1",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": false,
-      "enabled": false,
-      "loaded_in_prompt": false,
-      "status": "installed_but_unavailable_missing_prereqs",
-      "missing_prerequisites": "bins: wacli",
-      "example": "Lisa, use wacli for this task."
+      "homepage": "https://wacli.sh",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [
+          "wacli"
+        ],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "weather",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Get current weather and forecasts (no API key required).",
+      "example": "Lisa, use \"weather\" for this task.",
+      "emoji": "\ud83c\udf24\ufe0f",
       "source": "openclaw-bundled",
       "bundled": true,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use weather for this task."
+      "homepage": "https://wttr.in/:help",
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "web-design-guidelines",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+      "example": "Lisa, use \"web-design-guidelines\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use web-design-guidelines for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "web-games",
+      "enabled": false,
+      "installed": true,
+      "configured": false,
+      "status": "disabled_but_installed",
       "description": "Web browser game development principles. Framework selection, WebGPU, optimization, PWA.",
+      "example": "Lisa, use \"web-games\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use web-games for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "web-research",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Run Brave-powered web, image, video, and news research through mcporter.",
+      "example": "Lisa, use \"web-research\" for this task.",
+      "emoji": "\ud83d\udd0e",
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use web-research for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     },
     {
       "name": "webapp-testing",
+      "enabled": true,
+      "installed": true,
+      "configured": true,
+      "status": "enabled_and_configured",
       "description": "Web application testing principles. E2E, Playwright, deep audit strategies.",
+      "example": "Lisa, use \"webapp-testing\" for this task.",
+      "emoji": null,
       "source": "openclaw-managed",
       "bundled": false,
-      "installed": true,
-      "eligible": true,
-      "enabled": true,
-      "loaded_in_prompt": true,
-      "status": "enabled_and_configured",
-      "missing_prerequisites": "",
-      "example": "Lisa, use webapp-testing for this task."
+      "homepage": null,
+      "blockedByAllowlist": false,
+      "missing": {
+        "bins": [],
+        "anyBins": [],
+        "env": [],
+        "config": [],
+        "os": []
+      }
     }
   ],
   "notes": [
-    "This file replaces the older static catalog and is based on live VPS runtime checks.",
-    "gog remains installed but disabled by design."
+    "This catalog is generated from live VPS runtime output. It does not copy secrets.",
+    "If a skill is 'blocked_by_exec_allowlist', it exists but OpenClaw is intentionally preventing shell execution until explicitly allowlisted."
   ]
 }
