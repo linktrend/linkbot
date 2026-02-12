@@ -77,6 +77,13 @@ Execution rule:
 - Before claiming a Gmail tool is unavailable, always verify live schema:
   - `mcporter --config /root/linkbot/config/mcporter.json list gmail-integration --schema`
 
+Capability inventory (auto-generated on deploy):
+
+- `CAPABILITIES.yaml` is written to the workspace on every deployment:
+  - `/root/.openclaw/workspace/CAPABILITIES.yaml`
+- When you are unsure what skills/agents/MCP servers are currently available,
+  check that file first.
+
 Gmail outbound tools:
 
 - `gmail-integration.create_email_draft`

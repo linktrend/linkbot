@@ -104,7 +104,14 @@ deploy_remote() {
     log_info "Step 1/7: Syncing monorepo to remote..."
     ssh "$DEPLOY_HOST" "
         if [ -d $DEPLOY_PATH/.git ]; then
-            cd $DEPLOY_PATH && git pull origin main
+            cd $DEPLOY_PATH &&
+            if [ -n \"\$(git status --porcelain)\" ]; then
+              echo \"Remote repo has local changes (must be clean for deploy).\" >&2
+              git status --porcelain >&2
+              exit 2
+            fi &&
+            git fetch origin main &&
+            git pull --ff-only origin main
         else
             git clone https://github.com/linktrend/linkbot.git $DEPLOY_PATH
         fi
@@ -113,7 +120,7 @@ deploy_remote() {
     
     # Step 2: Install dependencies on remote
     log_info "Step 2/7: Installing dependencies..."
-    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm install"
+    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm ci"
     log_success "Dependencies installed"
     
     # Step 3: Build OpenClaw on remote
@@ -136,7 +143,56 @@ deploy_remote() {
     ssh "$DEPLOY_HOST" "
         mkdir -p /root/.openclaw/workspace /root/.openclaw/workspace/config &&
         cp -f $DEPLOY_PATH/bots/$BOT_NAME/docs/reference/templates/TOOLS.md /root/.openclaw/workspace/TOOLS.md &&
-        cp -f $DEPLOY_PATH/config/mcporter.json /root/.openclaw/workspace/config/mcporter.json
+        cp -f $DEPLOY_PATH/config/mcporter.json /root/.openclaw/workspace/config/mcporter.json &&
+        python3 - <<'PY' >/root/.openclaw/workspace/CAPABILITIES.yaml
+import datetime, json, subprocess
+
+def sh(cmd):
+    return subprocess.check_output(cmd, text=True)
+
+skills = json.loads(sh(['/root/openclaw-bot/openclaw.mjs','skills','list','--json']))
+agents = json.loads(sh(['/root/openclaw-bot/openclaw.mjs','agents','list','--json']))
+mcp = json.loads(sh(['bash','-lc','cd /root/linkbot && mcporter --config config/mcporter.json list --json']))
+
+now = datetime.datetime.utcnow().isoformat() + 'Z'
+print(f'generated_at: \"{now}\"')
+print('runtime_host: \"'+sh(['bash','-lc','hostname']).strip()+'\"')
+print('skills:')
+for s in skills.get('skills', []):
+    name = s.get('name','')
+    disabled = bool(s.get('disabled'))
+    eligible = bool(s.get('eligible'))
+    blocked = bool(s.get('blockedByAllowlist'))
+    missing = s.get('missing') or {}
+    bins = missing.get('bins') or []
+    env = missing.get('env') or []
+    os_ = missing.get('os') or []
+    print(f'  - name: \"{name}\"')
+    print(f'    enabled: {str(not disabled).lower()}')
+    print(f'    eligible: {str(eligible).lower()}')
+    print(f'    blocked_by_exec_allowlist: {str(blocked).lower()}')
+    if bins or env or os_:
+        print('    missing:')
+        if bins: print('      bins: [' + ', '.join([json.dumps(b) for b in bins]) + ']')
+        if env:  print('      env: [' + ', '.join([json.dumps(e) for e in env]) + ']')
+        if os_:  print('      os: [' + ', '.join([json.dumps(o) for o in os_]) + ']')
+print('agents:')
+for a in agents:
+    aid = a.get('id','')
+    ws = a.get('workspace','')
+    model = a.get('model','')
+    print(f'  - id: \"{aid}\"')
+    if ws: print(f'    workspace: \"{ws}\"')
+    if model: print(f'    model: \"{model}\"')
+print('mcp_servers:')
+for s in mcp.get('servers', []):
+    name = s.get('name','')
+    status = s.get('status','')
+    tool_count = len(s.get('tools') or [])
+    print(f'  - name: \"{name}\"')
+    print(f'    status: \"{status}\"')
+    print(f'    tools_count: {tool_count}')
+PY
     "
     log_success "Workspace templates + mcporter config synced"
 
