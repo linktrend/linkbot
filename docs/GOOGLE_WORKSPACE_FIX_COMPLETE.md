@@ -20,7 +20,7 @@ Your Lisa bot has **TWO DIFFERENT** Google Workspace integration approaches:
 **Status:** ✅ **FULLY WORKING**  
 
 **What I Fixed:**
-1. Set `GOG_KEYRING_PASSWORD=REDACTED_PASSWORD` in 4 locations:
+1. Set `GOG_KEYRING_PASSWORD=<REDACTED_PASSWORD>` in 4 locations:
    - `/etc/systemd/system/openclaw.service` (systemd Environment)
    - `/root/openclaw-bot/.env` (service EnvironmentFile)
    - `/root/.bashrc` (SSH sessions)
@@ -169,7 +169,7 @@ The enabled Google Workspace **skills** (`google-docs`, `google-sheets`) are MCP
 
 ```bash
 # Test 1: Create Document
-$ export GOG_KEYRING_PASSWORD=REDACTED_PASSWORD
+$ export GOG_KEYRING_PASSWORD=<REDACTED_PASSWORD>
 $ gog docs create "Test Document from CLI Fix" --account lisa@linktrend.media --json
 {
   "file": {
@@ -216,17 +216,17 @@ $ gog gmail search 'newer_than:1d' --account lisa@linktrend.media --max 3 --json
 ```bash
 # Systemd service has the password
 $ systemctl show openclaw --property=Environment
-Environment=GOG_KEYRING_PASSWORD=REDACTED_PASSWORD PATH=/usr/local/bin:/usr/bin:/bin
+Environment=GOG_KEYRING_PASSWORD=<REDACTED_PASSWORD> PATH=/usr/local/bin:/usr/bin:/bin
 ✅ CONFIRMED
 
 # .env file has the password
 $ grep GOG /root/openclaw-bot/.env
-GOG_KEYRING_PASSWORD=REDACTED_PASSWORD
+GOG_KEYRING_PASSWORD=<REDACTED_PASSWORD>
 GOG_ACCOUNT=lisa@linktrend.media
 ✅ CONFIRMED
 
 # gog authentication works
-$ export GOG_KEYRING_PASSWORD=REDACTED_PASSWORD && gog auth list
+$ export GOG_KEYRING_PASSWORD=<REDACTED_PASSWORD> && gog auth list
 lisa@linktrend.media	calendar,chat,classroom,contacts,docs,drive,gmail,people,sheets,tasks	2026-02-10T14:11:00Z	oauth
 ✅ CONFIRMED
 ```

@@ -182,7 +182,7 @@ Lisa Bot
 ### About the Password
 
 You were 100% correct:
-- `REDACTED_PASSWORD` **IS** Lisa's Gmail password
+- `<REDACTED_PASSWORD>` **IS** Lisa's Gmail password
 - I was wrong calling it a "keyring password"
 - `gog` used it as the encryption password for the OAuth token
 - It's the actual Google account password

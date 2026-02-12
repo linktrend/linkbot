@@ -29,11 +29,11 @@ This guide completes the 3-step plan to set up Google Workspace MCP skills and r
 
 ### What You Need to Do 🔧
 
-Complete the OAuth authentication for **google-sheets** skill (takes 2 minutes):
+Run one OAuth flow that writes tokens for docs, sheets, slides (future), and gmail-integration:
 
 ---
 
-## Step 1: Authenticate Google Sheets
+## Step 1: Run Unified OAuth Bootstrap
 
 **SSH into VPS:**
 ```bash
@@ -42,7 +42,7 @@ ssh root@178.128.77.125
 
 **Run the authentication script:**
 ```bash
-python3 /root/linkbot/scripts/vps-google-auth.py
+python3 /root/linkbot/scripts/vps-google-auth.py --reset
 ```
 
 **You'll see an OAuth URL like this:**
@@ -56,11 +56,9 @@ https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=...
 
 2. **Open it in your browser** on your computer (not the VPS)
 
-3. **Log in** with Lisa's Google account:
-   - Email: `lisa@linktrend.media`
-   - Password: `REDACTED_PASSWORD`
+3. **Log in** with Lisa's Google account
 
-4. **Approve all permissions** when Google asks:
+4. **Approve all requested permissions** when Google asks:
    - ✅ View and manage spreadsheets
    - ✅ View and manage Drive files
 
@@ -76,11 +74,11 @@ https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=...
 
 7. **Press Enter**
 
-**Expected output:**
-```
-✅ Token saved to /root/linkbot/skills/shared/google-sheets/token.json
-✅ google-sheets authenticated successfully!
-```
+**Expected output includes token write summary for:**
+- `/root/linkbot/skills/shared/google-docs/token.json`
+- `/root/linkbot/skills/shared/google-sheets/token.json`
+- `/root/linkbot/skills/shared/google-slides/token.json`
+- `/root/linkbot/skills/shared/gmail-integration/tokens.json`
 
 ---
 

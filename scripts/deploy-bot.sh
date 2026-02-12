@@ -123,7 +123,12 @@ deploy_remote() {
     
     # Step 4: Update runtime configuration
     log_info "Step 4/6: Updating runtime config..."
-    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && ./openclaw.mjs doctor --fix"
+    ssh "$DEPLOY_HOST" "
+        mkdir -p /root/.openclaw &&
+        cp $DEPLOY_PATH/bots/$BOT_NAME/config/$BOT_NAME/openclaw.json /root/.openclaw/openclaw.json &&
+        cd $DEPLOY_PATH/bots/$BOT_NAME &&
+        OPENCLAW_CONFIG_PATH=/root/.openclaw/openclaw.json ./openclaw.mjs doctor --non-interactive --no-workspace-suggestions >/tmp/openclaw-doctor.log 2>&1 || true
+    "
     log_success "Runtime config updated"
     
     # Step 5: Deploy skills to runtime directory

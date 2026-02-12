@@ -111,7 +111,7 @@ mcporter --config /root/linkbot/config/mcporter.json call google-docs.createDocu
 - User's budget: Keep under $50 in API costs
 - Must work on headless VPS (no GUI browser)
 - Use Lisa's Google account: lisa@linktrend.media
-- Password: REDACTED_PASSWORD
+- Password: <REDACTED_PASSWORD>
 
 **Recommended Approach:**
 
@@ -208,7 +208,7 @@ tail -f /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log
 **VPS User:** root  
 **Lisa Telegram:** @lisalinktrendlinkbot  
 **Lisa Gmail:** lisa@linktrend.media  
-**Lisa Password:** REDACTED_PASSWORD  
+**Lisa Password:** <REDACTED_PASSWORD>  
 **Shared Drive Folder:** 11ZfeG_-kHcXR-RIe08EaE3uM-aQde8Ta  
 
 **Commands:**

@@ -82,6 +82,14 @@ config/business-partner/secrets/
 **/secrets/*.json
 google-oauth-credentials.json
 google-service-account.json
+**/token.json
+**/tokens.json
+
+# Bot security artifacts
+bots/*/config/*/secrets/
+bots/*/config/*/exec-approvals.json
+bots/*/config/*/.env
+bots/*/config/*/.env.*
 
 # Database Files
 *.db

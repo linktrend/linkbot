@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "socket": {
+    "path": "/root/.openclaw/exec-approvals.sock",
+    "token": "REPLACE_WITH_SECURE_RANDOM_TOKEN"
+  },
+  "defaults": {},
+  "agents": {
+    "*": {
+      "allowlist": [
+        {"id": "gog-1", "pattern": "/usr/local/bin/gog", "lastUsedAt": 0},
+        {"id": "bash-1", "pattern": "/usr/bin/bash", "lastUsedAt": 0},
+        {"id": "sh-1", "pattern": "/usr/bin/sh", "lastUsedAt": 0},
+        {"id": "env-1", "pattern": "/usr/bin/env", "lastUsedAt": 0},
+        {"id": "echo-1", "pattern": "/usr/bin/echo", "lastUsedAt": 0},
+        {"id": "cat-1", "pattern": "/usr/bin/cat", "lastUsedAt": 0},
+        {"id": "ls-1", "pattern": "/usr/bin/ls", "lastUsedAt": 0},
+        {"id": "pwd-1", "pattern": "/usr/bin/pwd", "lastUsedAt": 0},
+        {"id": "whoami-1", "pattern": "/usr/bin/whoami", "lastUsedAt": 0}
+      ]
+    }
+  }
+}

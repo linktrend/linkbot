@@ -1,176 +1,208 @@
 #!/usr/bin/env python3
 """
-VPS-Friendly Google OAuth Authentication Script
-Authenticates Google Docs and Google Sheets MCP skills without browser
+VPS-friendly OAuth bootstrap for Google Workspace MCP servers.
+
+Runs one OAuth consent flow and writes token artifacts for:
+- google-docs
+- google-sheets
+- google-slides (future use)
+- gmail-integration
 """
 
-import os
-import sys
+from __future__ import annotations
+
+import argparse
 import json
+import sys
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
-def setup_google_docs():
-    """Setup OAuth for google-docs MCP skill"""
-    print("\n" + "="*60)
-    print("  GOOGLE DOCS MCP - OAuth Setup")
-    print("="*60)
-    
-    skills_dir = "/root/linkbot/skills/shared/google-docs"
-    creds_file = Path(skills_dir) / "credentials.json"
-    token_file = Path(skills_dir) / "token.json"
-    
-    if not creds_file.exists():
-        print(f"❌ ERROR: {creds_file} not found")
-        return False
-    
-    if token_file.exists():
-        print("✅ google-docs already authenticated (token.json exists)")
-        return True
-    
-    print("\n📋 Manual OAuth Setup Required:\n")
-    print("1. Install dependencies locally:")
-    print(f"   cd {skills_dir} && npm install")
-    print("\n2. Run the MCP server once:")
-    print(f"   cd {skills_dir} && node index.js")
-    print("\n3. It will display an OAuth URL - open it in your browser")
-    print("4. Authorize with lisa@linktrend.media")
-    print("5. The token.json will be created automatically")
-    print("\nPress Ctrl+C and run these commands manually.")
-    
-    return False
+try:
+    from google_auth_oauthlib.flow import InstalledAppFlow
+except Exception as exc:
+    print(f"ERROR: missing dependency google-auth-oauthlib: {exc}", file=sys.stderr)
+    print("Install with: pip install google-auth-oauthlib", file=sys.stderr)
+    sys.exit(1)
 
-def setup_google_sheets():
-    """Setup OAuth for google-sheets MCP skill (Python-based)"""
-    print("\n" + "="*60)
-    print("  GOOGLE SHEETS MCP - OAuth Setup")
-    print("="*60)
-    
+
+ROOT = Path("/root/linkbot")
+GOOGLE_DOCS_DIR = ROOT / "skills/shared/google-docs"
+GOOGLE_SHEETS_DIR = ROOT / "skills/shared/google-sheets"
+GOOGLE_SLIDES_DIR = ROOT / "skills/shared/google-slides"
+GMAIL_DIR = ROOT / "skills/shared/gmail-integration"
+HOME_GMAIL_TOKENS = Path.home() / "gmail_mcp_tokens" / "tokens.json"
+
+DEFAULT_CREDENTIALS = GOOGLE_DOCS_DIR / "credentials.json"
+PREFERRED_CREDENTIALS = Path("/root/.openclaw/secrets/google-oauth.json")
+
+TOKEN_TARGETS = {
+    "google-docs": GOOGLE_DOCS_DIR / "token.json",
+    "google-sheets": GOOGLE_SHEETS_DIR / "token.json",
+    "google-slides": GOOGLE_SLIDES_DIR / "token.json",
+    "gmail-integration-project": GMAIL_DIR / "tokens.json",
+    "gmail-integration-home": HOME_GMAIL_TOKENS,
+}
+
+SCOPES = [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.send",
+    "https://www.googleapis.com/auth/gmail.modify",
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/calendar.events",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/documents",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/presentations",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "openid",
+]
+
+
+def write_json(path: Path, payload: dict, mode: int = 0o600) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    path.chmod(mode)
+
+
+def reset_existing_tokens() -> None:
+    for _, token_path in TOKEN_TARGETS.items():
+        if token_path.exists():
+            token_path.unlink()
+
+
+def parse_auth_code(redirect_url: str) -> str:
+    parsed = urlparse(redirect_url)
+    query = parse_qs(parsed.query)
+    raw_code = query.get("code", [None])[0]
+    if not raw_code:
+        raise ValueError("No 'code' parameter found in redirect URL.")
+    return unquote(raw_code)
+
+
+def run_oauth_flow(credentials_path: Path, redirect_url_override: str | None = None):
+    creds_blob = json.loads(credentials_path.read_text(encoding="utf-8"))
+    key = creds_blob.get("installed") or creds_blob.get("web") or {}
+    redirect_uris = key.get("redirect_uris") or ["http://localhost"]
+    redirect_uri = redirect_uris[0]
+
+    flow = InstalledAppFlow.from_client_secrets_file(
+        str(credentials_path),
+        SCOPES,
+        redirect_uri=redirect_uri,
+    )
+    auth_url, _ = flow.authorization_url(
+        access_type="offline",
+        prompt="consent",
+    )
+
+    print("\n" + "=" * 72)
+    print("OPEN THIS URL IN YOUR LOCAL BROWSER")
+    print("=" * 72)
+    print(f"redirect_uri={redirect_uri}")
+    print(auth_url)
+    print("\nAfter approval, copy the FULL redirect URL and paste it below.")
+    print("It usually looks like: http://localhost/?code=...&scope=...")
+    print("=" * 72 + "\n")
+
+    if redirect_url_override:
+        redirect_url = redirect_url_override.strip()
+    else:
+        redirect_url = input("Paste redirect URL: ").strip()
+    code = parse_auth_code(redirect_url)
+    flow.fetch_token(code=code)
+    return flow.credentials
+
+
+def save_tokens(credentials) -> None:
+    oauth_token = json.loads(credentials.to_json())
+
+    # Docs / Sheets / Slides servers can consume standard OAuth authorized-user token JSON.
+    write_json(TOKEN_TARGETS["google-docs"], oauth_token)
+    write_json(TOKEN_TARGETS["google-sheets"], oauth_token)
+    write_json(TOKEN_TARGETS["google-slides"], oauth_token)
+
+    # Gmail MCP expects this field layout in tokens.json.
+    gmail_token = {
+        "token": credentials.token,
+        "refresh_token": credentials.refresh_token,
+        "token_uri": credentials.token_uri,
+        "client_id": credentials.client_id,
+        "client_secret": credentials.client_secret,
+        "scopes": credentials.scopes,
+        "expiry": credentials.expiry.isoformat() if credentials.expiry else None,
+    }
+    write_json(TOKEN_TARGETS["gmail-integration-project"], gmail_token)
+    write_json(TOKEN_TARGETS["gmail-integration-home"], gmail_token)
+
+
+def print_summary() -> None:
+    print("\n" + "=" * 72)
+    print("TOKEN WRITE SUMMARY")
+    print("=" * 72)
+    for name, path in TOKEN_TARGETS.items():
+        status = "OK" if path.exists() else "MISSING"
+        print(f"{name:26s} {status:8s} {path}")
+    print("=" * 72)
+
+
+def parse_args() -> argparse.Namespace:
+    default_credentials = str(PREFERRED_CREDENTIALS if PREFERRED_CREDENTIALS.exists() else DEFAULT_CREDENTIALS)
+    parser = argparse.ArgumentParser(description="Bootstrap Google OAuth tokens for MCP servers.")
+    parser.add_argument(
+        "--credentials",
+        default=default_credentials,
+        help=f"OAuth client credentials JSON path (default: {default_credentials})",
+    )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Delete existing token artifacts before running OAuth.",
+    )
+    parser.add_argument(
+        "--redirect-url",
+        default="",
+        help="Optional full redirect URL to run non-interactively.",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    credentials_path = Path(args.credentials)
+
+    if not credentials_path.exists():
+        print(f"ERROR: credentials file not found: {credentials_path}", file=sys.stderr)
+        return 1
+
+    if args.reset:
+        reset_existing_tokens()
+
     try:
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        import pickle
-    except ImportError:
-        print("❌ ERROR: Missing dependencies")
-        print("Run: pip install google-auth-oauthlib google-api-python-client")
-        return False
-    
-    skills_dir = "/root/linkbot/skills/shared/google-sheets"
-    creds_file = Path(skills_dir) / "credentials.json"
-    token_file = Path(skills_dir) / "token.json"
-    
-    if not creds_file.exists():
-        print(f"❌ ERROR: {creds_file} not found")
-        return False
-    
-    if token_file.exists():
-        print("✅ google-sheets already authenticated (token.json exists)")
-        return True
-    
-    SCOPES = [
-        'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive'
-    ]
-    
-    try:
-        print("\n🔐 Starting OAuth Flow...\n")
-        flow = InstalledAppFlow.from_client_secrets_file(str(creds_file), SCOPES)
-        
-        # Generate the auth URL
-        auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
-        
-        print("="*60)
-        print("  AUTHORIZATION REQUIRED")
-        print("="*60)
-        print("\n1. Open this URL in your browser:\n")
-        print(f"   {auth_url}\n")
-        print("2. Log in with: lisa@linktrend.media")
-        print("3. Approve the permissions")
-        print("4. You'll be redirected to localhost (this will fail - that's ok)")
-        print("5. Copy the ENTIRE redirect URL from your browser address bar")
-        print("   (It starts with: http://localhost/?code=...)\n")
-        
-        redirect_url = input("Paste the redirect URL here: ").strip()
-        
-        # Extract the code from the redirect URL
-        if "code=" in redirect_url:
-            code = redirect_url.split("code=")[1].split("&")[0]
-        else:
-            print("❌ ERROR: Invalid redirect URL")
-            return False
-        
-        # Exchange code for credentials
-        flow.fetch_token(code=code)
-        creds = flow.credentials
-        
-        # Save the credentials
-        with open(token_file, 'w') as f:
-            f.write(creds.to_json())
-        
-        print(f"\n✅ Token saved to {token_file}")
-        print("✅ google-sheets authenticated successfully!")
-        return True
-        
-    except Exception as e:
-        print(f"\n❌ ERROR during OAuth: {e}")
-        return False
+        creds = run_oauth_flow(credentials_path, args.redirect_url or None)
+    except KeyboardInterrupt:
+        print("\nInterrupted by user.")
+        return 1
+    except Exception as exc:
+        print(f"\nERROR: OAuth flow failed: {exc}", file=sys.stderr)
+        return 1
 
-def setup_gmail_integration():
-    """Setup OAuth for gmail-integration MCP skill"""
-    print("\n" + "="*60)
-    print("  GMAIL INTEGRATION MCP - OAuth Setup")
-    print("="*60)
-    
-    token_dir = Path.home() / "gmail_mcp_tokens"
-    token_dir.mkdir(parents=True, exist_ok=True)
-    
-    token_file = token_dir / "tokens.json"
-    
-    if token_file.exists():
-        print("✅ gmail-integration already authenticated")
-        return True
-    
-    print("\n📋 Gmail integration will authenticate automatically")
-    print("   when first started by OpenClaw.")
-    print(f"\n   Token storage: {token_dir}")
-    print("\n✅ Ready for first-run authentication")
-    return True
+    if not creds.refresh_token:
+        print(
+            "ERROR: refresh_token was not returned. Re-run with --reset and ensure prompt=consent.",
+            file=sys.stderr,
+        )
+        return 1
 
-def main():
-    """Main setup flow"""
-    print("\n" + "="*60)
-    print("  GOOGLE WORKSPACE MCP SKILLS - OAuth Setup")
-    print("  VPS-Friendly Authentication Script")
-    print("="*60)
-    
-    results = {}
-    
-    # Setup each skill
-    results['google-docs'] = setup_google_docs()
-    results['google-sheets'] = setup_google_sheets()
-    results['gmail-integration'] = setup_gmail_integration()
-    
-    # Summary
-    print("\n" + "="*60)
-    print("  SETUP SUMMARY")
-    print("="*60 + "\n")
-    
-    for skill, success in results.items():
-        status = "✅ Ready" if success else "⚠️  Needs Manual Setup"
-        print(f"  {skill:20s} {status}")
-    
-    print("\n" + "="*60)
-    print("\n📋 Next Steps:")
-    print("   1. Restart OpenClaw: systemctl restart openclaw")
-    print("   2. Test via Telegram: 'Lisa, create a Google Doc'")
-    print("   3. Monitor logs: tail -f /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log")
-    print("\n" + "="*60 + "\n")
-    
-    # Exit with appropriate code
-    sys.exit(0 if all(results.values()) else 1)
+    save_tokens(creds)
+    print_summary()
+
+    print("\nNext steps:")
+    print("1. Validate server registration: mcporter --config /root/linkbot/config/mcporter.json list")
+    print("2. Restart bot runtime: systemctl restart openclaw")
+    print("3. Smoke test docs/sheets/gmail through Telegram prompts.")
+    return 0
+
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Setup interrupted by user")
-        sys.exit(1)
+    raise SystemExit(main())

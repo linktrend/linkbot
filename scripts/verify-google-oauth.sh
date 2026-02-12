@@ -1,93 +1,61 @@
 #!/bin/bash
-# Verification script for Google Workspace OAuth setup
-# Run this AFTER completing the OAuth flow
+# Verify Google Workspace MCP OAuth readiness on VPS.
 
-set -e
+set -euo pipefail
 
-VPS_IP="178.128.77.125"
-VPS_USER="root"
-GOOGLE_ACCOUNT="info@linktrend.media"
+VPS_IP="${VPS_IP:-178.128.77.125}"
+VPS_USER="${VPS_USER:-root}"
+REMOTE="${VPS_USER}@${VPS_IP}"
 
 echo "=========================================="
-echo "Google Workspace OAuth Verification"
+echo "Google Workspace MCP OAuth Verification"
+echo "Target: ${REMOTE}"
 echo "=========================================="
-echo ""
+echo
 
-# Check 1: Authentication
-echo "✓ Checking authenticated accounts..."
-ssh ${VPS_USER}@${VPS_IP} "gog auth list" | grep -q "${GOOGLE_ACCOUNT}" && \
-  echo "  ✅ ${GOOGLE_ACCOUNT} is authenticated" || \
-  echo "  ❌ ${GOOGLE_ACCOUNT} NOT authenticated"
-echo ""
+echo "1) Checking token artifacts..."
+ssh "$REMOTE" '
+for f in \
+  /root/linkbot/skills/shared/google-docs/token.json \
+  /root/linkbot/skills/shared/google-sheets/token.json \
+  /root/linkbot/skills/shared/google-slides/token.json \
+  /root/linkbot/skills/shared/gmail-integration/tokens.json \
+  /root/gmail_mcp_tokens/tokens.json; do
+  if [ -f "$f" ]; then
+    echo "  ✅ $f"
+  else
+    echo "  ❌ $f"
+  fi
+done
+'
+echo
 
-# Check 2: Gmail
-echo "✓ Testing Gmail access..."
-if ssh ${VPS_USER}@${VPS_IP} "gog gmail list --account ${GOOGLE_ACCOUNT} --max 1 --json" &>/dev/null; then
-  echo "  ✅ Gmail access working"
+echo "2) Checking MCP server registration..."
+ssh "$REMOTE" 'mcporter --config /root/linkbot/config/mcporter.json list || true'
+echo
+
+echo "3) Checking OpenClaw service state..."
+if ssh "$REMOTE" "systemctl is-active openclaw" | grep -q "active"; then
+  echo "  ✅ openclaw is active"
 else
-  echo "  ❌ Gmail access failed"
+  echo "  ❌ openclaw is not active"
 fi
-echo ""
+echo
 
-# Check 3: Calendar
-echo "✓ Testing Calendar access..."
-if ssh ${VPS_USER}@${VPS_IP} "gog calendar list-calendars --account ${GOOGLE_ACCOUNT} --json" &>/dev/null; then
-  echo "  ✅ Calendar access working"
-else
-  echo "  ❌ Calendar access failed"
-fi
-echo ""
+echo "4) Optional schema checks (non-destructive)..."
+ssh "$REMOTE" '
+mcporter --config /root/linkbot/config/mcporter.json list google-docs --schema >/dev/null 2>&1 \
+  && echo "  ✅ google-docs schema reachable" \
+  || echo "  ⚠️  google-docs schema check failed"
 
-# Check 4: Drive
-echo "✓ Testing Drive access..."
-if ssh ${VPS_USER}@${VPS_IP} "gog drive list --account ${GOOGLE_ACCOUNT} --max 1 --json" &>/dev/null; then
-  echo "  ✅ Drive access working"
-else
-  echo "  ❌ Drive access failed"
-fi
-echo ""
+mcporter --config /root/linkbot/config/mcporter.json list google-sheets --schema >/dev/null 2>&1 \
+  && echo "  ✅ google-sheets schema reachable" \
+  || echo "  ⚠️  google-sheets schema check failed"
 
-# Check 5: Contacts
-echo "✓ Testing Contacts access..."
-if ssh ${VPS_USER}@${VPS_IP} "gog contacts list --account ${GOOGLE_ACCOUNT} --max 1 --json" &>/dev/null; then
-  echo "  ✅ Contacts access working"
-else
-  echo "  ❌ Contacts access failed"
-fi
-echo ""
+mcporter --config /root/linkbot/config/mcporter.json list gmail-integration --schema >/dev/null 2>&1 \
+  && echo "  ✅ gmail-integration schema reachable" \
+  || echo "  ⚠️  gmail-integration schema check failed"
+'
+echo
 
-# Check 6: OpenClaw Service
-echo "✓ Checking OpenClaw service..."
-if ssh ${VPS_USER}@${VPS_IP} "sudo systemctl is-active openclaw" | grep -q "active"; then
-  echo "  ✅ OpenClaw service running"
-else
-  echo "  ❌ OpenClaw service not running"
-fi
-echo ""
-
-# Check 7: gog skill status
-echo "✓ Checking gog skill status..."
-if ssh ${VPS_USER}@${VPS_IP} "cd /root/openclaw-bot && node openclaw.mjs skills list" | grep -q "✓ ready.*gog"; then
-  echo "  ✅ gog skill is READY"
-else
-  echo "  ⚠️  gog skill not ready (may need OpenClaw restart)"
-fi
-echo ""
-
-# Check 8: Token details
-echo "✓ Checking token details..."
-ssh ${VPS_USER}@${VPS_IP} "gog auth tokens list ${GOOGLE_ACCOUNT} 2>/dev/null" || echo "  ℹ️  Token details not available"
-echo ""
-
-# Summary
-echo "=========================================="
-echo "Verification Complete"
-echo "=========================================="
-echo ""
-echo "If all checks passed (✅), Google Workspace is fully configured!"
-echo ""
-echo "Next steps:"
-echo "  1. Test via Telegram: 'Check my Gmail inbox'"
-echo "  2. Test via Telegram: 'What's on my calendar today?'"
-echo "  3. Test via Telegram: 'List my recent Drive files'"
-echo ""
+echo "Verification complete."

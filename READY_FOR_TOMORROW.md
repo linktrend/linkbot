@@ -16,7 +16,7 @@ python3 /root/linkbot/scripts/vps-google-auth.py
 **What happens:**
 1. Script shows OAuth URL
 2. You open it in browser
-3. Log in with lisa@linktrend.media / REDACTED_PASSWORD
+3. Log in with lisa@linktrend.media / <REDACTED_PASSWORD>
 4. Approve permissions
 5. Browser redirects to localhost (will fail - that's ok!)
 6. Copy the ENTIRE URL from address bar

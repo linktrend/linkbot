@@ -1,568 +1,220 @@
 {
-  // ============================================================================
-  // OpenClaw Multi-Model Routing Configuration - OPTIMIZED FOR 98% COST SAVINGS
-  // Business Partner Bot (Lisa) - Production Configuration
-  // ============================================================================
-  // 
-  // This configuration achieves $17-30/month total costs (vs. $1,300 baseline)
-  // by strategically using FREE models and cost-effective alternatives.
-  //
-  // DEPLOYMENT: Copy this file to ~/.openclaw/openclaw.json on your VPS
-  //
-  // COST STRATEGY (98% SAVINGS):
-  // - Primary: Kimi K2.5 ($0.45/$2.25 per 1M via OpenRouter) - Agentic excellence
-  // - Heartbeat: Gemini 2.5 Flash Lite (FREE via direct API) - Zero cost monitoring
-  // - Sub-agents: Devstral 2 (FREE via OpenRouter) - Zero cost coding
-  // - Skills: 60-70% use FREE Gemini models via direct API
-  // - Coding: Antigravity (FREE Opus/Gemini) + Devstral fallback (FREE)
-  //
-  // MONTHLY COST BREAKDOWN:
-  // - Strategic reasoning (Kimi K2.5): ~$12-20
-  // - Skills (mostly FREE Gemini): ~$5-10
-  // - Heartbeat: $0 (FREE Gemini)
-  // - Sub-agents: $0 (FREE Devstral)
-  // - Coding: $0 (FREE Antigravity + Devstral)
-  // TOTAL: $17-30/month (98% savings vs. $1,300 baseline)
-  //
-  // ============================================================================
+  // Lisa production runtime config (OpenClaw 2026.2.9 schema-compatible).
 
-  // Environment variables (API keys)
   env: {
-    // REQUIRED: OpenRouter for Kimi K2.5 + FREE Devstral 2
     OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}",
-    
-    // REQUIRED: Google AI for FREE Gemini models (heartbeat, skills, fallback)
     GOOGLE_API_KEY: "${GOOGLE_API_KEY}",
-    
-    // OPTIONAL: Anthropic for emergency fallback only (rarely used)
     ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}",
-    
-    // OPTIONAL: Brave Search for web research skill
     BRAVE_API_KEY: "${BRAVE_API_KEY}",
-    
-    // REQUIRED: Telegram bot token
     TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}",
     TELEGRAM_CHAT_ID: "${TELEGRAM_CHAT_ID}",
-    
-    // REQUIRED: Google Workspace integration
     GOOGLE_OAUTH_CLIENT_ID: "${GOOGLE_OAUTH_CLIENT_ID}",
     GOOGLE_OAUTH_CLIENT_SECRET: "${GOOGLE_OAUTH_CLIENT_SECRET}",
     GOOGLE_SERVICE_ACCOUNT_KEY: "${GOOGLE_SERVICE_ACCOUNT_KEY}",
-    
-    // Gateway auth token
     OPENCLAW_AUTH_TOKEN: "${OPENCLAW_AUTH_TOKEN}",
   },
 
-  // ============================================================================
-  // Agent Configuration
-  // ============================================================================
   agents: {
     defaults: {
-      // Workspace for agent files
       workspace: "~/.openclaw/workspace",
 
-      // ========================================================================
-      // PRIMARY MODEL: Kimi K2.5 (Best agentic performance, 30x cheaper than Sonnet)
-      // ========================================================================
       model: {
-        primary: "openrouter/moonshotai/kimi-k2.5",  // $0.45/$2.25 per 1M
-        
+        primary: "openrouter/moonshotai/kimi-k2.5",
         fallbacks: [
-          "google/gemini-2.5-flash",                  // FREE (direct API)
-          "openrouter/openai/devstral-2",             // FREE (OpenRouter)
-          "anthropic/claude-sonnet-4-5",              // Emergency only ($3/$15)
+          "google/gemini-2.5-flash",
+          "openrouter/openai/devstral-2",
+          "anthropic/claude-sonnet-4-5",
         ],
       },
 
-      // ========================================================================
-      // HEARTBEAT: FREE Gemini Flash Lite (Zero cost monitoring)
-      // ========================================================================
       heartbeat: {
-        enabled: true,
-        intervalMinutes: 60,  // Check every hour (4x less frequent than default)
-        model: "google/gemini-2.5-flash-lite",  // FREE via direct API
-        thinking: "off",  // No thinking needed for heartbeat
+        every: "60m",
+        model: "google/gemini-2.5-flash-lite",
+        target: "last",
+        activeHours: {
+          start: "07:00",
+          end: "22:00",
+          timezone: "America/New_York",
+        },
       },
 
-      // ========================================================================
-      // SUB-AGENTS: FREE Devstral 2 (Zero cost parallel tasks)
-      // ========================================================================
       subagents: {
         model: {
-          primary: "openrouter/openai/devstral-2",  // FREE, 73%+ SWE-bench
-          fallbacks: ["google/gemini-2.5-flash"],    // FREE backup
+          primary: "openrouter/openai/devstral-2",
+          fallbacks: ["google/gemini-2.5-flash"],
         },
         maxConcurrent: 3,
         archiveAfterMinutes: 60,
       },
 
-      // ========================================================================
-      // IMAGE MODEL: FREE Gemini 3 Flash (Zero cost vision)
-      // ========================================================================
       imageModel: {
-        primary: "google/gemini-3-flash",  // FREE via direct API
-        fallbacks: ["google/gemini-2.0-flash-vision"],  // FREE backup
+        primary: "google/gemini-3-flash",
+        fallbacks: ["google/gemini-2.0-flash-vision"],
       },
 
-      // ========================================================================
-      // CONTEXT MANAGEMENT: Safeguard Mode (40-50% token reduction)
-      // ========================================================================
       compaction: {
-        enabled: true,
-        mode: "safeguard",  // Prevents infinite retry loops
-        keepRecentTokens: 8000,  // Aggressive pruning (keep ~4-5 recent messages)
-        reserveTokens: 8000,  // Reserve space for response
-        autoTrigger: true,  // Auto-compact when nearing limit
+        mode: "safeguard",
+        reserveTokensFloor: 8000,
       },
 
-      // ========================================================================
-      // SESSION PRUNING: Remove old tool results (20-30% reduction)
-      // ========================================================================
-      pruning: {
-        enabled: true,
-        mode: "cache-TTL",  // Remove cached tool results after expiry
-        maxToolResults: 10,  // Keep only last 10 tool outputs
+      contextPruning: {
+        mode: "cache-ttl",
+        ttl: "24h",
+        keepLastAssistants: 3,
       },
 
-      // ========================================================================
-      // PERFORMANCE SETTINGS
-      // ========================================================================
-      thinkingDefault: "low",  // Faster responses
-      verboseDefault: "off",   // Cleaner responses
+      memorySearch: {
+        provider: "local",
+        enabled: true,
+      },
+
+      thinkingDefault: "low",
+      verboseDefault: "off",
       timeoutSeconds: 120,
-      
+      maxConcurrent: 4,
+
       sandbox: {
         mode: "all",
         scope: "session",
         workspaceAccess: "rw",
       },
 
-      // ========================================================================
-      // MODEL CATALOG & ALIASES
-      // ========================================================================
       models: {
-        // Primary Models
-        "openrouter/moonshotai/kimi-k2.5": {
-          alias: "Kimi",
-          // Cost: $0.45/$2.25 per 1M (30x cheaper than Opus)
-        },
-        "google/gemini-2.5-flash": {
-          alias: "Gemini",
-          // Cost: FREE (up to 1,500 req/day)
-        },
-        "openrouter/openai/devstral-2": {
-          alias: "Devstral",
-          // Cost: FREE (excellent for coding)
-        },
-        "anthropic/claude-sonnet-4-5": {
-          alias: "Sonnet",
-          // Cost: $3/$15 per 1M (emergency fallback only)
-        },
-        "google/gemini-2.5-flash-lite": {
-          alias: "FlashLite",
-          // Cost: FREE (heartbeat, simple tasks)
-        },
-        "google/gemini-3-flash": {
-          alias: "GeminiVision",
-          // Cost: FREE (image analysis)
-        },
+        "openrouter/moonshotai/kimi-k2.5": { alias: "Kimi" },
+        "google/gemini-2.5-flash": { alias: "Gemini" },
+        "openrouter/openai/devstral-2": { alias: "Devstral" },
+        "anthropic/claude-sonnet-4-5": { alias: "Sonnet" },
+        "google/gemini-2.5-flash-lite": { alias: "FlashLite" },
+        "google/gemini-3-flash": { alias: "GeminiVision" },
       },
     },
   },
 
-  // ============================================================================
-  // SESSION MANAGEMENT: Force resets after threshold
-  // ============================================================================
-  session: {
-    maxMessages: 50,  // Force new session after 50 messages (maintains speed)
-    archiveAfterMinutes: 120,  // Auto-archive long sessions
-    
-    // Memory persistence (sessions archived but searchable)
-    memory: {
-      enabled: true,
-      autoFlush: true,  // Automatically save important facts
-      semanticSearch: true,  // Enable searching old sessions
-      retentionDays: 365,  // Keep sessions for 1 year
-    },
-    
-    compaction: {
-      model: "google/gemini-2.5-flash",  // Use FREE model for summaries
-    },
-  },
-
-  // ============================================================================
-  // SKILLS CONFIGURATION: Per-Skill Model Routing
-  // ============================================================================
+  // Per-skill routing metadata is stored in skills.entries.<name>.config.
+  // These config values are custom metadata (schema-valid) and preserved for orchestration logic.
   skills: {
-    enabled: true,
-    path: "~/.openclaw/skills",
-    autoLoad: true,
-    
-    // Per-skill model configuration
-    config: {
-      // FREE TIER SKILLS (60-70% of tasks) - Use FREE Gemini
+    load: {
+      watch: true,
+      watchDebounceMs: 250,
+    },
+    entries: {
       "gmail-integration": {
         enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
-      },
-      "calendar-integration": {
-        enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
-      },
-      "web-research": {
-        enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
+        config: { model: "google/gemini-2.5-flash" },
       },
       "google-docs": {
         enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
+        config: { model: "google/gemini-2.5-flash" },
       },
       "google-sheets": {
         enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
+        config: { model: "google/gemini-2.5-flash" },
       },
-      "google-slides": {
-        enabled: true,
-        model: "google/gemini-2.5-flash",  // FREE
-      },
-      
-      // MID-TIER SKILLS (20-30% of tasks) - Use Kimi K2.5
       "document-generator": {
         enabled: true,
-        model: "openrouter/moonshotai/kimi-k2.5",  // Better writing quality
+        config: { model: "openrouter/moonshotai/kimi-k2.5" },
       },
       "task-management": {
         enabled: true,
-        model: "openrouter/moonshotai/kimi-k2.5",
+        config: { model: "openrouter/moonshotai/kimi-k2.5" },
       },
       "meeting-scheduler": {
         enabled: true,
-        model: "openrouter/moonshotai/kimi-k2.5",
+        config: { model: "openrouter/moonshotai/kimi-k2.5" },
       },
-      
-      // SPECIALIZED SKILLS (5-10% of tasks)
-      "financial-calculations": {
+      "financial-calculator": {
         enabled: true,
-        model: "openrouter/deepseek/deepseek-reasoner",  // $0.14/$0.28, math specialist
+        config: { model: "openrouter/deepseek/deepseek-reasoner" },
       },
-      
-      // CODING SKILLS (Dual-track: Antigravity + File-based)
-      "coding-python": {
+      "python-coding": {
         enabled: true,
-        preferSubagent: true,
-        subagentModel: "openrouter/openai/devstral-2",  // FREE
-        complexityThreshold: "medium",  // Spawn sub-agent for medium+ complexity
-      },
-      "coding-typescript": {
-        enabled: true,
-        preferSubagent: true,
-        subagentModel: "openrouter/openai/devstral-2",  // FREE
-      },
-      "coding-javascript": {
-        enabled: true,
-        preferSubagent: true,
-        subagentModel: "openrouter/openai/devstral-2",  // FREE
-      },
-    },
-    
-    // Security settings
-    security: {
-      sandboxed: true,  // Restrict skills to workspace directory only
-      timeout: 30,  // Maximum execution time per skill (seconds)
-      verifySignatures: false,  // Enable if skills support signing
-    },
-  },
-
-  // ============================================================================
-  // CODING CONFIGURATION: Dual-Track with Task Persistence
-  // ============================================================================
-  coding: {
-    strategy: "task-persistence",  // Once started, must finish with same method
-    
-    // PRIMARY: Antigravity (FREE Opus/Gemini via Google OAuth)
-    antigravity: {
-      enabled: true,
-      priority: 1,
-      
-      // Task persistence (critical: no mid-task switching)
-      taskPersistence: {
-        enabled: true,
-        onceStartedMustFinish: true,  // Never switch methods mid-task
-        
-        // Rate limit handling
-        rateLimitBehavior: {
-          mode: "wait-indefinitely",  // Wait as long as needed
-          initialWait: 30,  // Wait 30 min initially
-          checkInterval: 5,  // Check every 5 min if rate limit lifted
-          maxWaitHours: 4,  // Give up after 4 hours (complete failure)
-          
-          // User notifications
-          notifyUser: true,
-          notifyChannel: "telegram",
-          notifyInterval: 30,  // Update user every 30 min
+        config: {
+          preferSubagent: true,
+          subagentModel: "openrouter/openai/devstral-2",
+          complexityThreshold: "medium",
         },
-        
-        // Only fall back on COMPLETE FAILURE (not rate limit)
-        fallbackTriggers: [
-          "authentication_failed",
-          "service_unavailable",
-          "quota_exhausted",
-          "api_deprecated",
-          "critical_error",
-        ],
       },
-    },
-    
-    // FALLBACK: File-based coding with FREE Devstral
-    fileBased: {
-      enabled: true,
-      priority: 2,
-      
-      // When to use file-based
-      useFor: [
-        "new_tasks_when_antigravity_unavailable",
-        "antigravity_complete_failure",
-        "simple_quick_tasks",  // Tasks < 5 min estimated
-      ],
-      
-      model: "openrouter/openai/devstral-2",  // FREE
-      spawnSubagent: true,  // Spawn for complex tasks
-      complexityThreshold: "medium",
-      
-      outputPath: "~/Projects/",
+      "typescript-coding": {
+        enabled: true,
+        config: {
+          preferSubagent: true,
+          subagentModel: "openrouter/openai/devstral-2",
+          complexityThreshold: "medium",
+        },
+      },
+      "behavioral-modes": { enabled: true },
+      brainstorming: { enabled: true },
+      "clean-code": { enabled: true },
+      "code-review-checklist": { enabled: true },
+      "parallel-agents": { enabled: true },
+      "plan-writing": { enabled: true },
+      "web-design-guidelines": { enabled: true },
     },
   },
 
-  // ============================================================================
-  // PLUGINS: Antigravity Integration
-  // ============================================================================
-  plugins: {
-    "openclaw-antigravity-auth": {
-      enabled: true,
-      priority: 1,
-      fallbackOnError: true,
-      
-      // OAuth configuration (set during installation)
-      oauth: {
-        clientId: "${GOOGLE_ANTIGRAVITY_CLIENT_ID}",
-        clientSecret: "${GOOGLE_ANTIGRAVITY_CLIENT_SECRET}",
-        redirectUri: "http://localhost:8080/callback",
-      },
-    },
-  },
-
-  // ============================================================================
-  // TELEGRAM CHANNEL CONFIGURATION
-  // ============================================================================
   channels: {
     telegram: {
       enabled: true,
-      token: "${TELEGRAM_BOT_TOKEN}",
-      adminChatId: "${TELEGRAM_CHAT_ID}",
-      
-      // Security: Only Carlos can message Lisa
-      dmPolicy: "allowlist",  // Only allow specific user IDs
-      allowFrom: ["1123023078"],  // Carlos's Telegram user ID
-      
-      // Notification settings
-      notifications: {
-        enabled: true,
-        priority: "high",  // Only send urgent/high-priority messages
-        
-        // Event triggers
-        events: [
-          "high_priority_email",
-          "meeting_reminder_urgent",
-          "task_deadline_urgent",
-          "error_critical",
-          "user_mention",
-          "manual_alert",
-          "coding_task_update",  // Coding progress updates
-          "rate_limit_status",   // Rate limit notifications
-        ],
-        
-        // Quiet hours
-        quietHours: {
-          enabled: true,
-          start: "22:00",
-          end: "07:00",
-          timezone: "America/New_York",  // Adjust to your timezone
-        },
-      },
-      
-      // Bot commands
+      botToken: "${TELEGRAM_BOT_TOKEN}",
+      dmPolicy: "allowlist",
+      allowFrom: ["1123023078"],
+      groupPolicy: "allowlist",
+      streamMode: "partial",
       commands: {
-        enabled: true,
-        aliases: {
-          "/status": "What's my status? Any urgent items?",
-          "/today": "Summarize my calendar and tasks for today",
-          "/urgent": "Show me all high-priority items",
-          "/email": "Check my email for anything urgent",
-          "/new": "Start a fresh session but remember key facts",
-          "/help": "What can you help me with via Telegram?",
-        },
+        native: true,
+        nativeSkills: false,
       },
-      
-      // Rate limiting
-      rateLimit: {
-        messagesPerMinute: 10,
-        burstSize: 3,
-      },
+      customCommands: [
+        { command: "today", description: "Today summary" },
+        { command: "urgent", description: "Urgent items" },
+        { command: "email", description: "Urgent email check" },
+      ],
     },
   },
 
-  // ============================================================================
-  // GOOGLE WORKSPACE INTEGRATION
-  // ============================================================================
-  integrations: {
-    google: {
-      enabled: true,
-      
-      // OAuth credentials
-      oauth: {
-        credentialsPath: "~/.openclaw/secrets/google-oauth.json",
-        scopes: [
-          "https://www.googleapis.com/auth/gmail.readonly",
-          "https://www.googleapis.com/auth/gmail.send",
-          "https://www.googleapis.com/auth/gmail.modify",
-          "https://www.googleapis.com/auth/calendar",
-          "https://www.googleapis.com/auth/calendar.events",
-          "https://www.googleapis.com/auth/drive.file",
-          "https://www.googleapis.com/auth/documents",
-          "https://www.googleapis.com/auth/spreadsheets",
-          "https://www.googleapis.com/auth/presentations",
-        ],
-      },
-      
-      // Service account
-      serviceAccount: {
-        credentialsPath: "~/.openclaw/secrets/google-service-account.json",
-        subject: "lisa@yourdomain.com",  // Replace with Lisa's email
-      },
-      
-      // Gmail configuration
-      gmail: {
-        enabled: true,
-        defaultSender: "lisa@yourdomain.com",  // Replace with Lisa's email
-        signature: "\n\n---\nLisa\nStrategic Operations & Execution Lead\nLiNKtrend Venture Studio",
-        autoArchive: true,
-        maxResults: 50,
-      },
-      
-      // Calendar configuration
-      calendar: {
-        enabled: true,
-        defaultCalendar: "primary",
-        timeZone: "America/New_York",  // Adjust to your timezone
-        defaultReminders: [
-          { method: "email", minutes: 1440 },  // 1 day before
-          { method: "popup", minutes: 30 },     // 30 min before
-        ],
-      },
-      
-      // Docs/Sheets/Slides configuration
-      docs: {
-        enabled: true,
-        defaultFolder: "OpenClaw - Lisa",
-        shareByDefault: false,
-      },
-    },
-  },
-
-  // ============================================================================
-  // WEB TOOLS CONFIGURATION
-  // ============================================================================
   tools: {
     web: {
       search: {
         provider: "brave",
-        apiKey: "${BRAVE_API_KEY}",  // FREE tier: 2,000 requests/month
+        apiKey: "${BRAVE_API_KEY}",
       },
-      fetch: {
-        mode: "direct",  // No Firecrawl API costs
-      },
+      fetch: {},
     },
-    
-    // Exec tool for shell command execution (gog CLI for Gmail, etc.)
     exec: {
       host: "gateway",
-      security: "allowlist",  // Only approved commands via exec-approvals.json
-      ask: "off",              // No prompts for allowlisted commands
-      pathPrepend: ["/usr/local/bin", "/usr/bin"],  // Ensure gog is in PATH
+      security: "allowlist",
+      ask: "off",
+      pathPrepend: ["/usr/local/bin", "/usr/bin"],
     },
   },
 
-  // ============================================================================
-  // MEMORY SEARCH CONFIGURATION
-  // ============================================================================
-  memorySearch: {
-    provider: "local",  // No API usage
-    enabled: true,
+  commands: {
+    native: "auto",
+    nativeSkills: "auto",
   },
 
-  // ============================================================================
-  // GATEWAY CONFIGURATION
-  // ============================================================================
+  session: {
+    maintenance: {
+      mode: "enforce",
+      pruneAfter: "365d",
+      maxEntries: 2000,
+    },
+  },
+
   gateway: {
+    mode: "local",
     port: 18789,
-    
-    // Auth token for API access
     auth: {
+      mode: "token",
       token: "${OPENCLAW_AUTH_TOKEN}",
     },
   },
 
-  // ============================================================================
-  // SKILLS CONFIGURATION
-  // ============================================================================
-  // All skills security-scanned and approved (0/100 risk score)
-  // Enable skills by setting enabled: true
-  skills: {
-    // Shared skills (productivity & integrations)
-    shared: {
-      "gmail-integration": { enabled: true },
-      "google-docs": { enabled: true },
-      "google-sheets": { enabled: true },
-    },
-    
-    // Coding skills
-    coding: {
-      "python-coding": { enabled: true },
-      "typescript-coding": { enabled: true },
-    },
-    
-    // Specialized skills
-    specialized: {
-      "document-generator": { enabled: true },
-      "financial-calculator": { enabled: true },
-      "meeting-scheduler": { enabled: true },
-      "task-management": { enabled: true },
-    },
-    
-    // Antigravity Kit skills (Google Labs)
-    antigravity: {
-      "behavioral-modes": { enabled: true },        // AI behavior modes
-      "brainstorming": { enabled: true },           // Ideation techniques
-      "clean-code": { enabled: true },              // Clean code principles
-      "code-review-checklist": { enabled: true },   // Code review standards
-      "parallel-agents": { enabled: true },         // Multi-agent workflows
-      "plan-writing": { enabled: true },            // Project planning
-      "web-design-guidelines": { enabled: true },   // Web design standards
-    },
-  },
-
-  // ============================================================================
-  // AGENTS CONFIGURATION
-  // ============================================================================
-  // Specialist agents for delegating complex tasks
-  // All agents security-scanned and approved (0/100 risk score)
-  agents: {
-    antigravity: {
-      "orchestrator": { enabled: true },            // Multi-agent orchestration
-      "performance-optimizer": { enabled: true },   // Performance optimization
-      "product-manager": { enabled: true },         // Product management
-      "product-owner": { enabled: true },           // Product ownership
-      "project-planner": { enabled: true },         // Project planning
+  plugins: {
+    entries: {
+      telegram: {
+        enabled: true,
+      },
     },
   },
 }
