@@ -1,114 +1,193 @@
 #!/bin/bash
-# Google Workspace OAuth Setup Script for Lisa (VPS)
-# This script guides you through setting up Google Workspace authentication
+#
+# Google Workspace MCP Skills OAuth Setup Script
+# Authenticates google-docs, google-sheets, and gmail-integration skills
+#
 
 set -e
 
-echo "=========================================="
-echo "Google Workspace OAuth Setup for Lisa"
-echo "=========================================="
-echo ""
-echo "This script will help you authenticate Lisa with your Google Workspace account."
-echo ""
-echo "Prerequisites:"
-echo "  - You must be on your LOCAL machine (not the VPS)"
-echo "  - You need access to info@linktrend.media Google account"
-echo "  - Port 8080 must be available on your local machine"
-echo ""
-echo "Press Enter to continue..."
-read
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
 
-# Step 1: Create SSH tunnel
-echo ""
-echo "STEP 1: Creating SSH tunnel to VPS..."
-echo "=========================================="
-echo ""
-echo "Opening SSH tunnel on port 8080..."
-echo "This terminal will stay connected. DO NOT CLOSE IT."
-echo ""
-echo "In a NEW terminal window, you'll run the OAuth command."
+log_info() { echo -e "${BLUE}ℹ${NC}  $1"; }
+log_success() { echo -e "${GREEN}✓${NC}  $1"; }
+log_warn() { echo -e "${YELLOW}⚠${NC}  $1"; }
+log_error() { echo -e "${RED}✗${NC}  $1"; exit 1; }
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MONOREPO_ROOT="$(dirname "$SCRIPT_DIR")"
+SKILLS_DIR="$MONOREPO_ROOT/skills/shared"
+
+log_info "Google Workspace MCP Skills OAuth Setup"
 echo ""
 
-# Open SSH tunnel in background
-ssh -L 8080:localhost:8080 root@178.128.77.125 -N &
-SSH_PID=$!
+# Check if running on VPS or locally
+if [ -d "/root/linkbot" ]; then
+    SKILLS_DIR="/root/linkbot/skills/shared"
+    log_info "Detected VPS environment"
+else
+    log_info "Detected local environment"
+fi
 
-echo "✓ SSH tunnel established (PID: $SSH_PID)"
-echo ""
-echo "Press Enter when you're ready to continue in a NEW terminal..."
-read
+# Authenticate Google Docs MCP Skill (Node.js)
+log_info "Setting up google-docs skill..."
+cd "$SKILLS_DIR/google-docs"
 
-# Step 2: Instructions for OAuth
-echo ""
-echo "STEP 2: Run OAuth Authentication"
-echo "=========================================="
-echo ""
-echo "In a NEW terminal window, run this command:"
-echo ""
-echo "ssh root@178.128.77.125 \"gog auth add info@linktrend.media --services gmail,calendar,drive,contacts,docs,sheets --port 8080\""
-echo ""
-echo "This will:"
-echo "  1. Start OAuth flow"
-echo "  2. Display a URL like: http://localhost:8080/auth/..."
-echo "  3. Open that URL in your browser"
-echo "  4. Sign in with info@linktrend.media"
-echo "  5. Grant all requested permissions"
-echo "  6. Return to terminal when complete"
-echo ""
-echo "Press Enter after you've completed the OAuth flow..."
-read
+if [ ! -f "credentials.json" ]; then
+    log_error "credentials.json not found in google-docs/\nPlease create it first."
+fi
 
-# Step 3: Verify
-echo ""
-echo "STEP 3: Verifying Authentication"
-echo "=========================================="
+log_info "Starting OAuth flow for google-docs..."
+log_warn "This will open an authorization URL. Please:"
+log_warn "1. Open the URL in your browser"
+log_warn "2. Log in with Lisa's Google account (lisa@linktrend.media)"
+log_warn "3. Approve the permissions"
+log_warn "4. Copy the authorization code"
 echo ""
 
-echo "Checking authenticated accounts..."
-ssh root@178.128.77.125 "gog auth list"
+# Run the MCP server's built-in auth (if available) or use Node.js auth
+if [ -f "auth-helper.js" ]; then
+    node auth-helper.js
+elif command -v node &> /dev/null; then
+    # Try to run the server once to trigger auth
+    log_info "Attempting automatic OAuth flow..."
+    timeout 60 node index.js || true
+fi
+
+if [ -f "token.json" ]; then
+    log_success "google-docs authenticated successfully!"
+else
+    log_warn "token.json not created. Manual authentication may be required."
+fi
 
 echo ""
-echo "Testing Gmail access..."
-ssh root@178.128.77.125 "gog gmail list --account info@linktrend.media --max 3" || echo "⚠ Gmail test failed"
-
-echo ""
-echo "Testing Calendar access..."
-ssh root@178.128.77.125 "gog calendar list-calendars --account info@linktrend.media" || echo "⚠ Calendar test failed"
-
-echo ""
-echo "Testing Drive access..."
-ssh root@178.128.77.125 "gog drive list --account info@linktrend.media --max 3" || echo "⚠ Drive test failed"
-
-# Step 4: Restart OpenClaw
-echo ""
-echo "STEP 4: Restarting OpenClaw"
-echo "=========================================="
+echo "---"
 echo ""
 
-ssh root@178.128.77.125 "sudo systemctl restart openclaw"
-sleep 5
-ssh root@178.128.77.125 "sudo systemctl status openclaw | head -15"
+# Authenticate Google Sheets MCP Skill (Python)
+log_info "Setting up google-sheets skill..."
+cd "$SKILLS_DIR/google-sheets"
 
-# Step 5: Final verification
+if [ ! -f "credentials.json" ]; then
+    log_error "credentials.json not found in google-sheets/\nPlease create it first."
+fi
+
+# For Python MCP, set environment variables
+export CREDENTIALS_PATH="$(pwd)/credentials.json"
+export TOKEN_PATH="$(pwd)/token.json"
+
+log_info "Google Sheets can use service account OR OAuth."
+log_info "Using OAuth credentials from credentials.json"
+
+# Try to run a quick auth check
+if command -v python3 &> /dev/null; then
+    log_info "Running Python OAuth flow..."
+    python3 << 'EOPY' || true
+import os
+import sys
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+]
+
+try:
+    creds = None
+    token_path = 'token.json'
+    creds_path = 'credentials.json'
+    
+    if os.path.exists(token_path):
+        print("Token already exists, skipping auth")
+        sys.exit(0)
+    
+    if not os.path.exists(creds_path):
+        print(f"ERROR: {creds_path} not found")
+        sys.exit(1)
+    
+    flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
+    
+    # Use run_local_server which handles the OAuth flow automatically
+    creds = flow.run_local_server(port=0, open_browser=False, authorization_prompt_message='')
+    
+    with open(token_path, 'w') as token_file:
+        token_file.write(creds.to_json())
+    
+    print(f"Token saved to {token_path}")
+    sys.exit(0)
+    
+except Exception as e:
+    print(f"Auth error: {e}")
+    sys.exit(1)
+EOPY
+fi
+
+if [ -f "token.json" ]; then
+    log_success "google-sheets authenticated successfully!"
+else
+    log_warn "token.json not created. Manual authentication may be required."
+fi
+
 echo ""
-echo "STEP 5: Final Verification"
-echo "=========================================="
+echo "---"
 echo ""
 
-echo "Checking gog skill status..."
-ssh root@178.128.77.125 "cd /root/openclaw-bot && node openclaw.mjs skills list | grep gog"
+# Authenticate Gmail Integration MCP Skill (Python)
+log_info "Setting up gmail-integration skill..."
+cd "$SKILLS_DIR/gmail-integration"
+
+log_info "Gmail integration uses different auth method (config-based)"
+log_info "Credentials will be passed via OpenClaw environment variables"
+
+# Create token storage directory
+TOKEN_DIR="$HOME/gmail_mcp_tokens"
+mkdir -p "$TOKEN_DIR"
+
+log_info "Gmail MCP token storage: $TOKEN_DIR"
+
+if [ -f "$TOKEN_DIR/tokens.json" ]; then
+    log_success "gmail-integration tokens already exist!"
+else
+    log_warn "gmail-integration tokens not yet created."
+    log_warn "They will be created when the skill first runs via OpenClaw."
+fi
 
 echo ""
-echo "=========================================="
-echo "✓ Setup Complete!"
-echo "=========================================="
-echo ""
-echo "Google Workspace is now connected to Lisa."
-echo "You can now use Gmail, Calendar, Drive, Docs, Sheets, and Contacts."
+echo "---"
 echo ""
 
-# Cleanup
-kill $SSH_PID 2>/dev/null || true
+# Summary
+log_success "OAuth Setup Complete!"
+echo ""
+log_info "Status Summary:"
+echo ""
 
-echo "SSH tunnel closed."
+if [ -f "$SKILLS_DIR/google-docs/token.json" ]; then
+    echo -e "  ${GREEN}✓${NC} google-docs: Authenticated"
+else
+    echo -e "  ${YELLOW}⚠${NC} google-docs: Needs manual auth"
+fi
+
+if [ -f "$SKILLS_DIR/google-sheets/token.json" ]; then
+    echo -e "  ${GREEN}✓${NC} google-sheets: Authenticated"
+else
+    echo -e "  ${YELLOW}⚠${NC} google-sheets: Needs manual auth"
+fi
+
+if [ -f "$HOME/gmail_mcp_tokens/tokens.json" ]; then
+    echo -e "  ${GREEN}✓${NC} gmail-integration: Authenticated"
+else
+    echo -e "  ${YELLOW}⚠${NC} gmail-integration: Will auth on first run"
+fi
+
+echo ""
+log_info "Next Steps:"
+echo "  1. Restart OpenClaw service: systemctl restart openclaw"
+echo "  2. Test via Telegram: 'Lisa, create a Google Doc titled Test'"
+echo "  3. Monitor logs: tail -f /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log"
 echo ""
