@@ -13,6 +13,8 @@ from typing import Dict, Any, List, Optional, Union
 from datetime import datetime, timedelta
 import httpx
 import dateutil.parser as parser
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from mcp.server.fastmcp import FastMCP
 from googleapiclient.discovery import build
@@ -43,6 +45,55 @@ logger = get_logger(__name__)
 
 # Get token manager
 token_manager = TokenManager()
+
+def _parse_recipients(raw_recipients: str) -> List[str]:
+    """
+    Parse comma/semicolon-separated recipient strings into a normalized list.
+    """
+    if not raw_recipients:
+        return []
+
+    normalized = raw_recipients.replace(";", ",")
+    return [recipient.strip() for recipient in normalized.split(",") if recipient.strip()]
+
+
+def _build_email_message(
+    to: str,
+    subject: str,
+    body_text: str,
+    cc: str = "",
+    bcc: str = ""
+) -> Dict[str, Any]:
+    """
+    Build a MIME email and return both encoded payload and normalized recipients.
+    """
+    to_recipients = _parse_recipients(to)
+    cc_recipients = _parse_recipients(cc)
+    bcc_recipients = _parse_recipients(bcc)
+
+    if not to_recipients:
+        raise ValueError("At least one recipient is required in `to`.")
+
+    message = MIMEMultipart()
+    message["to"] = ", ".join(to_recipients)
+    message["subject"] = subject
+
+    if cc_recipients:
+        message["cc"] = ", ".join(cc_recipients)
+
+    if bcc_recipients:
+        message["bcc"] = ", ".join(bcc_recipients)
+
+    message.attach(MIMEText(body_text, "plain"))
+
+    encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+    return {
+        "raw": encoded_message,
+        "to_recipients": to_recipients,
+        "cc_recipients": cc_recipients,
+        "bcc_recipients": bcc_recipients,
+    }
 
 
 def setup_tools(mcp: FastMCP) -> None:
@@ -776,10 +827,6 @@ def setup_tools(mcp: FastMCP) -> None:
                     reply_body += f"> {line}\n"
             
             # Create message
-            from email.mime.text import MIMEText
-            from email.mime.multipart import MIMEMultipart
-            import base64
-            
             message = MIMEMultipart()
             message["to"] = metadata.from_email
             message["subject"] = reply_headers["Subject"]
@@ -827,6 +874,131 @@ def setup_tools(mcp: FastMCP) -> None:
             return {
                 "success": False,
                 "error": f"Failed to create draft reply: {e}"
+            }
+
+    @mcp.tool()
+    def create_email_draft(
+        to: str,
+        subject: str,
+        body_text: str,
+        cc: str = "",
+        bcc: str = ""
+    ) -> Dict[str, Any]:
+        """
+        Create a draft for a brand-new outbound email.
+
+        This tool is for composing new emails not tied to an existing message thread.
+        It creates a draft and returns a draft ID. Use confirm_send_email() after user confirmation.
+
+        Args:
+            to (str): Recipient email(s), comma or semicolon separated.
+            subject (str): Email subject line.
+            body_text (str): Plain-text email body.
+            cc (str, optional): CC recipient email(s), comma or semicolon separated.
+            bcc (str, optional): BCC recipient email(s), comma or semicolon separated.
+
+        Returns:
+            Dict[str, Any]: Draft creation result and metadata.
+        """
+        credentials = get_credentials()
+
+        if not credentials:
+            return {"error": "Not authenticated. Please use the authenticate tool first."}
+
+        try:
+            service = build("gmail", "v1", credentials=credentials)
+            email_payload = _build_email_message(
+                to=to,
+                subject=subject,
+                body_text=body_text,
+                cc=cc,
+                bcc=bcc
+            )
+
+            draft = service.users().drafts().create(
+                userId="me",
+                body={"message": {"raw": email_payload["raw"]}}
+            ).execute()
+
+            return {
+                "success": True,
+                "message": "Draft email created successfully. Please confirm to send.",
+                "draft_id": draft.get("id", ""),
+                "confirmation_required": True,
+                "to": email_payload["to_recipients"],
+                "cc": email_payload["cc_recipients"],
+                "bcc": email_payload["bcc_recipients"],
+                "subject": subject,
+                "next_steps": [
+                    "Review the draft details",
+                    "If satisfied, call confirm_send_email(draft_id='...')"
+                ]
+            }
+        except Exception as e:
+            logger.error(f"Failed to create draft email: {e}")
+            return {
+                "success": False,
+                "error": f"Failed to create draft email: {e}"
+            }
+
+    @mcp.tool()
+    def send_new_email(
+        to: str,
+        subject: str,
+        body_text: str,
+        cc: str = "",
+        bcc: str = ""
+    ) -> Dict[str, Any]:
+        """
+        Send a brand-new outbound email immediately.
+
+        Use this only when the user has explicitly instructed the assistant to send now.
+
+        Args:
+            to (str): Recipient email(s), comma or semicolon separated.
+            subject (str): Email subject line.
+            body_text (str): Plain-text email body.
+            cc (str, optional): CC recipient email(s), comma or semicolon separated.
+            bcc (str, optional): BCC recipient email(s), comma or semicolon separated.
+
+        Returns:
+            Dict[str, Any]: Send result and message metadata.
+        """
+        credentials = get_credentials()
+
+        if not credentials:
+            return {"error": "Not authenticated. Please use the authenticate tool first."}
+
+        try:
+            service = build("gmail", "v1", credentials=credentials)
+            email_payload = _build_email_message(
+                to=to,
+                subject=subject,
+                body_text=body_text,
+                cc=cc,
+                bcc=bcc
+            )
+
+            sent_message = service.users().messages().send(
+                userId="me",
+                body={"raw": email_payload["raw"]}
+            ).execute()
+
+            return {
+                "success": True,
+                "message": "Email sent successfully.",
+                "email_id": sent_message.get("id", ""),
+                "thread_id": sent_message.get("threadId", ""),
+                "to": email_payload["to_recipients"],
+                "cc": email_payload["cc_recipients"],
+                "bcc": email_payload["bcc_recipients"],
+                "subject": subject
+            }
+        except Exception as e:
+            logger.error(f"Failed to send new email: {e}")
+            return {
+                "success": False,
+                "error": f"Failed to send new email: {e}"
             }
     
     @mcp.tool()

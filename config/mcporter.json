@@ -1,15 +1,18 @@
 {
   "mcpServers": {
     "google-docs": {
-      "command": "node",
+      "command": "/usr/bin/node",
       "args": ["/root/linkbot/skills/shared/google-docs/index.js"],
       "env": {
         "DRIVE_FOLDER_ID": "11ZfeG_-kHcXR-RIe08EaE3uM-aQde8Ta"
       }
     },
     "google-sheets": {
-      "command": "uvx",
-      "args": ["mcp-google-sheets@latest"],
+      "command": "/usr/bin/bash",
+      "args": [
+        "-lc",
+        "cd /root/linkbot/skills/shared/google-sheets && /usr/local/bin/uv run mcp-google-sheets"
+      ],
       "env": {
         "CREDENTIALS_PATH": "/root/linkbot/skills/shared/google-sheets/credentials.json",
         "TOKEN_PATH": "/root/linkbot/skills/shared/google-sheets/token.json",
@@ -17,7 +20,7 @@
       }
     },
     "gmail-integration": {
-      "command": "bash",
+      "command": "/usr/bin/bash",
       "args": [
         "-lc",
         "cd /root/linkbot/skills/shared/gmail-integration && ./.venv/bin/mcp run gmail_mcp/main.py:mcp"
@@ -26,6 +29,18 @@
         "PYTHONPATH": "/root/linkbot/skills/shared/gmail-integration",
         "CONFIG_FILE_PATH": "/root/linkbot/skills/shared/gmail-integration/config.yaml"
       }
+    },
+    "google-slides": {
+      "command": "/usr/bin/bash",
+      "args": [
+        "/root/linkbot/scripts/run-google-slides-mcp.sh"
+      ]
+    },
+    "web-research": {
+      "command": "/usr/bin/bash",
+      "args": [
+        "/root/linkbot/scripts/run-web-research-mcp.sh"
+      ]
     }
   }
 }

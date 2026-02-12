@@ -74,7 +74,7 @@
       maxConcurrent: 4,
 
       sandbox: {
-        mode: "all",
+        mode: "off",
         scope: "session",
         workspaceAccess: "rw",
       },
@@ -88,6 +88,36 @@
         "google/gemini-3-flash": { alias: "GeminiVision" },
       },
     },
+
+    // Multi-agent roster.
+    //
+    // Important: `sessions_spawn` only allows cross-agent spawning when the *requester* agent
+    // is configured with `subagents.allowAgents`. We keep the allowlist tight.
+    list: [
+      {
+        id: "main",
+        default: true,
+        subagents: {
+          allowAgents: [
+            "explorer-agent",
+            "orchestrator",
+            "product-manager",
+            "product-owner",
+            "project-planner",
+          ],
+        },
+      },
+      { id: "explorer-agent" },
+      {
+        id: "orchestrator",
+        subagents: {
+          allowAgents: ["explorer-agent", "product-manager", "product-owner", "project-planner"],
+        },
+      },
+      { id: "product-manager" },
+      { id: "product-owner" },
+      { id: "project-planner" },
+    ],
   },
 
   // Per-skill routing metadata is stored in skills.entries.<name>.config.
@@ -96,8 +126,55 @@
     load: {
       watch: true,
       watchDebounceMs: 250,
+      extraDirs: [
+        "~/.openclaw/skills/mcp-wrappers",
+        "~/.openclaw/skills/specialized",
+        "~/.openclaw/skills/coding",
+        "~/.openclaw/skills/antigravity",
+      ],
     },
     entries: {
+      gog: {
+        enabled: false,
+      },
+      // Requested skills (ensure enabled; prerequisites installed on VPS).
+      "session-logs": {
+        enabled: true,
+        config: { model: "google/gemini-2.5-flash" },
+      },
+      summarize: {
+        enabled: true,
+        config: { model: "google/gemini-2.5-flash" },
+      },
+      "video-frames": {
+        enabled: true,
+        config: { model: "google/gemini-2.5-flash" },
+      },
+
+      // Explicitly disabled skills (installed but kept off).
+      "2d-games": { enabled: false },
+      "3d-games": { enabled: false },
+      "game-art": { enabled: false },
+      "game-audio": { enabled: false },
+      "game-design": { enabled: false },
+      "game-development": { enabled: false },
+      "mobile-games": { enabled: false },
+      multiplayer: { enabled: false },
+      "pc-games": { enabled: false },
+      "web-games": { enabled: false },
+      slack: { enabled: false },
+      songsee: { enabled: false },
+      sonoscli: { enabled: false },
+      "spotify-player": { enabled: false },
+      "things-mac": { enabled: false },
+      tmux: { enabled: false },
+      "voice-call": { enabled: false },
+      wacli: { enabled: false },
+
+      // High-risk eval skills: keep disabled even if they exist on disk.
+      "environment-secrets-exfiltrator": { enabled: false },
+      "jailbreak-override": { enabled: false },
+
       "gmail-integration": {
         enabled: true,
         config: { model: "google/gemini-2.5-flash" },
@@ -107,6 +184,14 @@
         config: { model: "google/gemini-2.5-flash" },
       },
       "google-sheets": {
+        enabled: true,
+        config: { model: "google/gemini-2.5-flash" },
+      },
+      "google-slides": {
+        enabled: true,
+        config: { model: "google/gemini-2.5-flash" },
+      },
+      "web-research": {
         enabled: true,
         config: { model: "google/gemini-2.5-flash" },
       },

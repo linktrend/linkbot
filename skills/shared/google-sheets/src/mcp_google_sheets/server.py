@@ -26,7 +26,9 @@ from googleapiclient.discovery import build
 import google.auth
 
 # Constants
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+# Use least-privilege OAuth scopes compatible with Lisa's existing Google OAuth token.
+# `drive.file` avoids invalid_scope errors seen with full `drive` scope refresh.
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file']
 CREDENTIALS_CONFIG = os.environ.get('CREDENTIALS_CONFIG')
 TOKEN_PATH = os.environ.get('TOKEN_PATH', 'token.json')
 CREDENTIALS_PATH = os.environ.get('CREDENTIALS_PATH', 'credentials.json')

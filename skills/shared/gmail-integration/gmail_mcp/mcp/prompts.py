@@ -57,12 +57,16 @@ Welcome to the Gmail MCP for Claude Desktop! This integration allows Claude to a
    - Create a draft reply with `send_email_reply(email_id="...", reply_text="...", include_original=True)`
    - After reviewing and confirming, send the email with `confirm_send_email(draft_id="...")`
 
-4. **Calendar Integration**:
+4. **New Outbound Emails**:
+   - Create a draft new email with `create_email_draft(to="user@example.com", subject="...", body_text="...")`
+   - Send immediately when explicitly requested by the user with `send_new_email(to="user@example.com", subject="...", body_text="...")`
+
+5. **Calendar Integration**:
    - Create calendar events with `create_calendar_event(summary="...", start_time="...")`
    - Detect events from emails with `detect_events_from_email(email_id="...")`
    - List upcoming calendar events with `list_calendar_events(max_results=10)`
 
-5. **Troubleshooting**:
+6. **Troubleshooting**:
    - If you encounter any issues, check the debug help resource: `debug://help`
    - You can also check the server status with `server://status`
    - For authentication issues, see the authentication guide: `gmail://authentication_guide`
@@ -109,6 +113,15 @@ Welcome to the Gmail MCP for Claude Desktop! This integration allows Claude to a
 8. After user confirmation, send the email:
    ```
    confirm_send_email(draft_id="draft_id_from_previous_step")
+   ```
+
+9. Send a brand-new outbound email:
+   ```
+   send_new_email(
+       to="info@linktrend.media",
+       subject="Account Test",
+       body_text="Document created successfully. Here is the link: https://docs.google.com/..."
+   )
    ```
 
 ### Calendar Workflow

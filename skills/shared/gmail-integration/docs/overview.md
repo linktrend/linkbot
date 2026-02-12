@@ -20,6 +20,8 @@ Tools are functions that Claude can call to perform actions.
 | `get_email_overview` | Gets overview of inbox | None | Summarize inbox status |
 | `prepare_email_reply` | Prepares context for reply | `email_id`: str | Gather context before replying |
 | `send_email_reply` | Creates a draft reply | `email_id`: str, `reply_text`: str, `include_original`: bool | Draft a reply to an email |
+| `create_email_draft` | Creates a draft new email | `to`: str, `subject`: str, `body_text`: str, `cc`: str, `bcc`: str | Draft a brand-new outbound email |
+| `send_new_email` | Sends a brand-new email immediately | `to`: str, `subject`: str, `body_text`: str, `cc`: str, `bcc`: str | Send a new outbound email when user explicitly requests send |
 | `confirm_send_email` | Sends a draft email | `draft_id`: str | Send a previously created draft |
 | `create_calendar_event` | Creates a calendar event | `summary`: str, `start_time`: str, `end_time`: str, `description`: str, `location`: str, `attendees`: List[str], `color_id`: str (color name or ID 1-11) | Schedule a new event |
 | `detect_events_from_email` | Detects events in email | `email_id`: str | Extract event details from email |

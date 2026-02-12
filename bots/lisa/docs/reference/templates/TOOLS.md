@@ -45,3 +45,40 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
+
+## Google Workspace Access (MCP Only)
+
+- Primary account: `lisa@linktrend.media`
+- Use MCP wrappers for Google operations, not `gog` or raw `exec` calls.
+
+Preferred skills:
+
+- `google-docs`
+- `google-sheets`
+- `google-slides`
+- `web-research`
+- `gmail-integration`
+- `mcporter` (transport)
+
+Runtime references:
+
+- `mcporter` config: `/root/linkbot/config/mcporter.json`
+- OAuth credentials: `/root/.openclaw/secrets/google-oauth.json`
+- Token files:
+  - `/root/linkbot/skills/shared/google-docs/token.json`
+  - `/root/linkbot/skills/shared/google-sheets/token.json`
+  - `/root/linkbot/skills/shared/gmail-integration/tokens.json`
+
+Execution rule:
+
+- Always call `mcporter` with explicit config:
+  - `mcporter --config /root/linkbot/config/mcporter.json ...`
+- Use `call <server.tool> key=value` argument style (not `--flag value`).
+- Before claiming a Gmail tool is unavailable, always verify live schema:
+  - `mcporter --config /root/linkbot/config/mcporter.json list gmail-integration --schema`
+
+Gmail outbound tools:
+
+- `gmail-integration.create_email_draft`
+- `gmail-integration.send_new_email`
+- If the user explicitly asks to send now, use `gmail-integration.send_new_email`.

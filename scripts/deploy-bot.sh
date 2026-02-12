@@ -101,7 +101,7 @@ deploy_remote() {
     log_info "Deploying to remote: $DEPLOY_HOST:$DEPLOY_PATH"
     
     # Step 1: Clone or pull monorepo on remote
-    log_info "Step 1/6: Syncing monorepo to remote..."
+    log_info "Step 1/7: Syncing monorepo to remote..."
     ssh "$DEPLOY_HOST" "
         if [ -d $DEPLOY_PATH/.git ]; then
             cd $DEPLOY_PATH && git pull origin main
@@ -112,17 +112,17 @@ deploy_remote() {
     log_success "Monorepo synced"
     
     # Step 2: Install dependencies on remote
-    log_info "Step 2/6: Installing dependencies..."
+    log_info "Step 2/7: Installing dependencies..."
     ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm install"
     log_success "Dependencies installed"
     
     # Step 3: Build OpenClaw on remote
-    log_info "Step 3/6: Building OpenClaw..."
+    log_info "Step 3/7: Building OpenClaw..."
     ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm run build"
     log_success "Build complete"
     
     # Step 4: Update runtime configuration
-    log_info "Step 4/6: Updating runtime config..."
+    log_info "Step 4/7: Updating runtime config..."
     ssh "$DEPLOY_HOST" "
         mkdir -p /root/.openclaw &&
         cp $DEPLOY_PATH/bots/$BOT_NAME/config/$BOT_NAME/openclaw.json /root/.openclaw/openclaw.json &&
@@ -131,13 +131,29 @@ deploy_remote() {
     "
     log_success "Runtime config updated"
     
-    # Step 5: Deploy skills to runtime directory
-    log_info "Step 5/6: Deploying skills..."
-    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH && ln -sfn $DEPLOY_PATH/skills /root/.openclaw/skills"
-    log_success "Skills deployed (symlinked)"
+    # Step 5: Sync workspace templates to runtime directory
+    log_info "Step 5/7: Syncing workspace templates..."
+    ssh "$DEPLOY_HOST" "
+        mkdir -p /root/.openclaw/workspace /root/.openclaw/workspace/config &&
+        cp -f $DEPLOY_PATH/bots/$BOT_NAME/docs/reference/templates/TOOLS.md /root/.openclaw/workspace/TOOLS.md &&
+        cp -f $DEPLOY_PATH/config/mcporter.json /root/.openclaw/workspace/config/mcporter.json
+    "
+    log_success "Workspace templates + mcporter config synced"
+
+    # Step 6: Deploy skills to runtime directory
+    log_info "Step 6/7: Deploying skills..."
+    ssh "$DEPLOY_HOST" "
+        rm -rf /root/.openclaw/skills &&
+        mkdir -p /root/.openclaw/skills &&
+        ln -sfn $DEPLOY_PATH/skills/mcp-wrappers /root/.openclaw/skills/mcp-wrappers &&
+        ln -sfn $DEPLOY_PATH/skills/specialized /root/.openclaw/skills/specialized &&
+        ln -sfn $DEPLOY_PATH/skills/coding /root/.openclaw/skills/coding &&
+        ln -sfn $DEPLOY_PATH/skills/antigravity /root/.openclaw/skills/antigravity
+    "
+    log_success "Skills deployed (curated symlinks)"
     
-    # Step 6: Restart bot service
-    log_info "Step 6/6: Restarting bot..."
+    # Step 7: Restart bot service
+    log_info "Step 7/7: Restarting bot..."
     ssh "$DEPLOY_HOST" "systemctl restart openclaw"
     sleep 5
     ssh "$DEPLOY_HOST" "systemctl status openclaw --no-pager | head -15"
