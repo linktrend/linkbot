@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKFLOW_SCRIPT="${REPO_ROOT}/scripts/workflow/openclaw-synced.sh"
+
+subcommand="${1:-}"
+case "${subcommand}" in
+  synced)
+    shift
+    exec "${WORKFLOW_SCRIPT}" "$@"
+    ;;
+  ""|-h|--help|help)
+    cat <<'EOF'
+LiNKbot openclaw workflow wrapper
+
+Usage:
+  openclaw synced [options]
+
+Options are forwarded to scripts/workflow/openclaw-synced.sh.
+EOF
+    ;;
+  *)
+    printf 'Unknown subcommand: %s\n' "${subcommand}" >&2
+    printf 'Usage: openclaw synced [options]\n' >&2
+    exit 2
+    ;;
+esac
+

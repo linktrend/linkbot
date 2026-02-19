@@ -1,0 +1,8 @@
+# Paths under bots/lisa/ that must keep LiNKbot-specific behavior after upstream sync.
+# One path per line, relative to bots/lisa/.
+# Supports files and directories.
+
+config/lisa/openclaw.json
+config/lisa/exec-approvals.json.example
+docs/reference/templates/TOOLS.md
+

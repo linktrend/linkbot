@@ -1,5 +1,7 @@
 # GitHub Repository Cleanup
 
+> Canonical workflow note: Active Git strategy and required deployment procedure are defined in `docs/GIT_STRATEGY.md`. If this file conflicts with that document or with `scripts/deploy-bot.sh`, follow those sources.
+
 ## Action Required: Delete Deprecated Repository
 
 ### Repository to Delete
@@ -58,17 +60,20 @@ All future deployments will use:
 
 **Git Workflow:**  
 ```bash
-# Development
+# Development (feature branch)
 cd ~/Projects/LiNKbot
+git checkout main
+git pull --ff-only origin main
 git checkout -b feature/my-feature
 # ... make changes ...
 git add .
 git commit -m "Add feature"
 git push origin feature/my-feature
+# Open PR, merge to main
 
 # Deployment
 git checkout main
-git pull origin main
+git pull --ff-only origin main
 ./scripts/deploy-bot.sh lisa vps
 ```
 

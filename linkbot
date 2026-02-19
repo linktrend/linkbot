@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKFLOW_SCRIPT="${REPO_ROOT}/scripts/workflow/linkbot-deploy.sh"
+
+subcommand="${1:-}"
+case "${subcommand}" in
+  deploy)
+    shift
+    exec "${WORKFLOW_SCRIPT}" "$@"
+    ;;
+  ""|-h|--help|help)
+    cat <<'EOF'
+LiNKbot workflow wrapper
+
+Usage:
+  linkbot deploy [options]
+
+Options are forwarded to scripts/workflow/linkbot-deploy.sh.
+EOF
+    ;;
+  *)
+    printf 'Unknown subcommand: %s\n' "${subcommand}" >&2
+    printf 'Usage: linkbot deploy [options]\n' >&2
+    exit 2
+    ;;
+esac
+

@@ -107,7 +107,6 @@
             "documentation-writer",
             "explorer-agent",
             "frontend-specialist",
-            "game-developer",
             "mobile-developer",
             "orchestrator",
             "penetration-tester",
@@ -130,7 +129,6 @@
       { id: "documentation-writer" },
       { id: "explorer-agent" },
       { id: "frontend-specialist" },
-      { id: "game-developer" },
       { id: "mobile-developer" },
       {
         id: "orchestrator",
@@ -144,7 +142,6 @@
             "documentation-writer",
             "explorer-agent",
             "frontend-specialist",
-            "game-developer",
             "mobile-developer",
             "penetration-tester",
             "performance-optimizer",
