@@ -29,7 +29,7 @@
    - Prompts for redirect URL copy/paste
 
 4. ✅ **Documentation Complete**
-   - Full OAuth setup guide: `docs/GOOGLE_MCP_OAUTH_SETUP.md`
+   - Full OAuth setup guide: `docs/MCP_OAUTH_SETUP.md`
    - Step-by-step instructions with screenshots descriptions
    - Troubleshooting section
    - Testing commands
