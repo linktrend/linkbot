@@ -40,7 +40,9 @@ load_workflow_config() {
   : "${MAIN_BRANCH:=main}"
   : "${SOURCE_REMOTE_NAME:=openclaw-fork}"
   : "${SOURCE_REMOTE_URL:=https://github.com/linktrend/openclaw.git}"
-  : "${SOURCE_REMOTE_BRANCH:=main}"
+  : "${SOURCE_REMOTE_BRANCH:=upstream-main}"
+  : "${SOURCE_REMOTE_METADATA_BRANCH:=main}"
+  : "${SOURCE_REMOTE_SNAPSHOT_FILE:=.sync/upstream-snapshot.env}"
   : "${SYNC_BRANCH_PREFIX:=automation/openclaw-sync}"
   : "${DEPLOY_BRANCH_PREFIX:=automation/linkbot-deploy}"
   : "${DEPLOY_TARGET:=vps}"
@@ -145,24 +147,35 @@ create_branch_from_main() {
   repo_git checkout -b "${branch}"
 }
 
-read_last_synced_sha() {
+read_state_var() {
+  local key="$1"
   [[ -f "${STATE_FILE}" ]] || return 0
-  # shellcheck disable=SC1090
-  source "${STATE_FILE}"
-  printf '%s' "${LAST_SYNCED_OPENCLAW_SHA:-}"
+  awk -F= -v key="${key}" '$1 == key { print substr($0, index($0, "=") + 1) }' "${STATE_FILE}" | tail -n 1
 }
 
-write_last_synced_sha() {
-  local sha="$1"
-  local now_utc
-  now_utc="$(utc_now)"
+write_linkbot_sync_state() {
+  local fork_sha="$1"
+  local upstream_sha="$2"
+  local upstream_at_utc="$3"
+  local verified_at_utc="$4"
+  local imported_fork_sha="$5"
+  local imported_at_utc="$6"
+  local status="$7"
   mkdir -p "$(dirname "${STATE_FILE}")"
   cat >"${STATE_FILE}" <<EOF
-# Tracks the last imported commit from SOURCE_REMOTE_NAME/SOURCE_REMOTE_BRANCH.
+# Snapshot verification for the daily linkbot import pipeline.
 # Updated automatically by the linkbot sync workflow.
 
-LAST_SYNCED_OPENCLAW_SHA=${sha}
-LAST_SYNCED_AT_UTC=${now_utc}
+SNAPSHOT_MAX_AGE_HOURS=24
+SOURCE_REMOTE_NAME=${SOURCE_REMOTE_NAME}
+SOURCE_REMOTE_BRANCH=${SOURCE_REMOTE_BRANCH}
+LAST_FORK_SNAPSHOT_SHA=${fork_sha}
+LAST_UPSTREAM_SNAPSHOT_SHA=${upstream_sha}
+LAST_UPSTREAM_SNAPSHOT_AT_UTC=${upstream_at_utc}
+LAST_LINKBOT_VERIFIED_AT_UTC=${verified_at_utc}
+LAST_LINKBOT_IMPORTED_FORK_SHA=${imported_fork_sha}
+LAST_LINKBOT_IMPORTED_AT_UTC=${imported_at_utc}
+LAST_LINKBOT_STATUS=${status}
 EOF
 }
 

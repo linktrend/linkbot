@@ -18,11 +18,24 @@ This document defines the standard LiNKbot workflow across:
 
 The OpenClaw update chain is now automatic:
 
-1. `linktrend/openclaw` syncs daily from `openclaw/openclaw`.
-2. `linktrend/linkbot` syncs daily from `linktrend/openclaw`.
-3. The `linkbot` sync updates `bots/lisa`, preserves LiNKbot-specific overrides from `config/automation/openclaw-overrides.paths`, runs install/build/test, and pushes to `main` if validation passes.
+1. `linktrend/openclaw:upstream-main` is mirrored daily from `openclaw/openclaw:main`.
+2. `linktrend/openclaw:main` records the verified mirror snapshot metadata.
+3. `linktrend/linkbot` syncs daily from `linktrend/openclaw:upstream-main`.
+4. The `linkbot` sync updates `bots/lisa`, preserves LiNKbot-specific overrides from `config/automation/openclaw-overrides.paths`, records snapshot metadata in `config/automation/openclaw-sync-state.env`, runs install/build/test, and pushes to `main` if validation passes.
 
 No manual upstream-import command is part of the normal operator workflow anymore.
+
+### Snapshot timing
+
+The automation is scheduled so you can ask at `08:00` Taipei time whether `linkbot` has the latest OpenClaw updates for the current snapshot day:
+
+1. fork snapshot target: `07:05` Taipei time
+2. linkbot snapshot target: `07:35` Taipei time
+
+The operational definition of "latest" is therefore:
+
+- the most recent verified upstream snapshot no older than 24 hours
+- successfully imported into `linktrend/linkbot`
 
 ## Task Start
 

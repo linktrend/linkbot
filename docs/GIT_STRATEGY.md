@@ -8,7 +8,7 @@
 
 This document defines the active Git strategy for LiNKbot.
 
-LiNKbot is a monorepo in `linktrend/linkbot`. OpenClaw upstream updates are now synchronized automatically through GitHub Actions, so local day-to-day work is just:
+LiNKbot is a monorepo in `linktrend/linkbot`. OpenClaw upstream updates are synchronized automatically through GitHub Actions using a daily snapshot model, so local day-to-day work is just:
 
 1. pull `main`
 2. create or resume a task branch
@@ -31,13 +31,23 @@ OpenClaw updates no longer require a manual operator command in this repo.
 
 The active automation chain is:
 
-1. `openclaw/openclaw` -> daily sync into `linktrend/openclaw`
-2. `linktrend/openclaw` -> daily sync into `linktrend/linkbot`
-3. `linktrend/linkbot` imports `linktrend/openclaw` into `bots/lisa`
-4. LiNKbot-specific overrides listed in `config/automation/openclaw-overrides.paths` are restored
-5. install, build, and test run before the sync commit is pushed
+1. `openclaw/openclaw` is mirrored daily into `linktrend/openclaw:upstream-main`
+2. `linktrend/openclaw:main` records the verified snapshot metadata for that mirror
+3. `linktrend/linkbot` imports daily from `linktrend/openclaw:upstream-main`
+4. `linktrend/linkbot` records the imported fork SHA, upstream SHA, and snapshot timestamps in `config/automation/openclaw-sync-state.env`
+5. LiNKbot-specific overrides listed in `config/automation/openclaw-overrides.paths` are restored
+6. install, build, and test run before the sync commit is pushed
 
 Because the sync happens in GitHub, `openclaw synced` is retired.
+
+### Snapshot timing
+
+The daily cutoff is designed for your 8:00 AM Taipei check:
+
+1. fork mirror snapshot: `07:05` Taipei time
+2. linkbot import snapshot: `07:35` Taipei time
+
+This keeps the snapshot age under 24 hours when you ask each morning at `08:00` Taipei time.
 
 ## Non-Negotiable Rules
 

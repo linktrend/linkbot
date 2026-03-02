@@ -1,9 +1,9 @@
-name: Sync OpenClaw
+name: Sync OpenClaw Snapshot
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 4 * * *'
+    - cron: '35 23 * * *'
 
 permissions:
   contents: write
