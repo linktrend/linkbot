@@ -120,12 +120,12 @@ deploy_remote() {
     
     # Step 2: Install dependencies on remote
     log_info "Step 2/7: Installing dependencies..."
-    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm ci"
+    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && corepack enable && pnpm install --frozen-lockfile"
     log_success "Dependencies installed"
     
     # Step 3: Build OpenClaw on remote
     log_info "Step 3/7: Building OpenClaw..."
-    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && npm run build"
+    ssh "$DEPLOY_HOST" "cd $DEPLOY_PATH/bots/$BOT_NAME && corepack enable && pnpm build"
     log_success "Build complete"
     
     # Step 4: Update runtime configuration
@@ -248,8 +248,9 @@ deploy_local() {
     # Step 5: Install dependencies and build
     log_info "Step 5/5: Building bot..."
     cd "$BOT_DIR"
-    npm install
-    npm run build
+    corepack enable
+    pnpm install --frozen-lockfile
+    pnpm build
     log_success "Build complete"
     
     log_success "Local deployment complete!"

@@ -45,11 +45,11 @@ load_workflow_config() {
   : "${DEPLOY_BRANCH_PREFIX:=automation/linkbot-deploy}"
   : "${DEPLOY_TARGET:=vps}"
   : "${RUN_INSTALL:=1}"
-  : "${INSTALL_COMMAND:=npm ci}"
+  : "${INSTALL_COMMAND:=pnpm install --frozen-lockfile}"
   : "${RUN_BUILD:=1}"
-  : "${BUILD_COMMAND:=npm run build}"
+  : "${BUILD_COMMAND:=pnpm build}"
   : "${RUN_TESTS:=1}"
-  : "${TEST_COMMAND:=npm test}"
+  : "${TEST_COMMAND:=pnpm test}"
   : "${RUN_EXTRA_CHECKS:=0}"
   : "${EXTRA_CHECKS_COMMAND:=}"
   : "${AUTO_PUSH_BRANCH:=1}"
@@ -159,7 +159,7 @@ write_last_synced_sha() {
   mkdir -p "$(dirname "${STATE_FILE}")"
   cat >"${STATE_FILE}" <<EOF
 # Tracks the last imported commit from SOURCE_REMOTE_NAME/SOURCE_REMOTE_BRANCH.
-# Updated automatically by scripts/workflow/openclaw-synced.sh.
+# Updated automatically by the linkbot sync workflow.
 
 LAST_SYNCED_OPENCLAW_SHA=${sha}
 LAST_SYNCED_AT_UTC=${now_utc}
@@ -264,4 +264,3 @@ bot_path_rel() {
 ensure_logs_dir() {
   mkdir -p "${REPO_ROOT}/logs/workflows"
 }
-

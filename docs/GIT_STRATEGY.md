@@ -1,69 +1,57 @@
-# Git Strategy: Monorepo + Mainline Deploy
+# Git Strategy: Main Branch + Daily Sync
 
-**Document Version:** 2.0  
-**Last Updated:** February 19, 2026  
-**Status:** Active (Current Strategy)
-
----
+**Document Version:** 3.0
+**Last Updated:** March 2, 2026
+**Status:** Active
 
 ## Purpose
 
-This document is the canonical Git workflow for LiNKbot.
+This document defines the active Git strategy for LiNKbot.
 
-Current architecture is a **single monorepo** (`linktrend/linkbot`) with deployment from `main`.  
-The older "Fork -> Configure -> Deploy" model (with separate nested OpenClaw repos) was retired during the monorepo migration on February 11, 2026.
+LiNKbot is a monorepo in `linktrend/linkbot`. OpenClaw upstream updates are now synchronized automatically through GitHub Actions, so local day-to-day work is just:
 
----
+1. pull `main`
+2. create or resume a task branch
+3. push WIP before moving machines
+4. merge tested work into `main`
+5. deploy from `main`
 
 ## Source of Truth
 
-- **Primary repo:** `https://github.com/linktrend/linkbot`
-- **Primary branch:** `main`
-- **Deploy script:** `scripts/deploy-bot.sh`
-- **Deploy target config:** `scripts/deploy-config.sh`
+- Primary repo: `https://github.com/linktrend/linkbot`
+- Primary branch: `main`
+- Deploy script: `scripts/deploy-bot.sh`
+- Deploy target config: `scripts/deploy-config.sh`
 
-If any documentation conflicts with script behavior, **`scripts/deploy-bot.sh` is authoritative for deployment execution**.
+If documentation conflicts with `scripts/deploy-bot.sh`, the script is authoritative for deployment behavior.
 
----
+## Automated Sync Chain
 
-## Repository Model (Current)
+OpenClaw updates no longer require a manual operator command in this repo.
 
-All bot code, skills, agents, scripts, and docs live in one repository.
+The active automation chain is:
 
-```text
-LiNKbot/
-|-- bots/
-|   `-- lisa/                  # Tracked in this repo (no nested .git)
-|-- skills/                    # Shared and curated skill sets
-|-- agents/                    # Agent packs
-|-- scripts/
-|   |-- deploy-bot.sh          # Canonical deployment procedure
-|   `-- deploy-config.sh       # Target hosts and paths
-`-- docs/
-```
+1. `openclaw/openclaw` -> daily sync into `linktrend/openclaw`
+2. `linktrend/openclaw` -> daily sync into `linktrend/linkbot`
+3. `linktrend/linkbot` imports `linktrend/openclaw` into `bots/lisa`
+4. LiNKbot-specific overrides listed in `config/automation/openclaw-overrides.paths` are restored
+5. install, build, and test run before the sync commit is pushed
 
-There are no active submodules for bot source in this strategy.
+Because the sync happens in GitHub, `openclaw synced` is retired.
 
----
+## Non-Negotiable Rules
 
-## Non-Negotiable Rules (Must Follow)
+1. All production deployments come from `main`.
+2. Do not do feature work directly on `main`.
+3. Remote deployment repos must be clean.
+4. Remote repo updates are fast-forward only.
+5. No manual hotfix edits on server working trees.
+6. Do not commit secrets.
+7. Push branch state before moving between machines.
 
-1. **All production deployments come from `main`.**
-2. **Do not deploy from feature branches.**
-3. **Remote deployment repo must be clean.**  
-   `deploy-bot.sh` fails if `git status --porcelain` is not empty on target.
-4. **Remote updates are fast-forward only.**  
-   `deploy-bot.sh` uses `git fetch origin main` + `git pull --ff-only origin main`.
-5. **No manual hotfix edits on server working trees.**  
-   Fixes must be committed to Git, merged to `main`, then redeployed.
-6. **Do not commit secrets.**  
-   Keep credentials in approved runtime locations/env files, not in Git.
+## Required Local Workflow
 
----
-
-## Required Day-to-Day Workflow
-
-### 1) Start from an up-to-date `main`
+### 1. Start from current `main`
 
 ```bash
 cd /Users/linktrend/Projects/LiNKbot
@@ -71,71 +59,70 @@ git checkout main
 git pull --ff-only origin main
 ```
 
-### 2) Create a feature branch
+### 2. Create a task branch
 
 ```bash
-git checkout -b feature/<short-description>
+git checkout -b your-branch-name
+git push -u origin your-branch-name
 ```
 
-### 3) Make and validate changes locally
-
-Run relevant checks before pushing (build/tests/lint as applicable to changed scope).
-
-### 4) Commit and push branch
+### 3. Resume work on any machine
 
 ```bash
-git add <files>
-git commit -m "<clear, scoped message>"
-git push -u origin feature/<short-description>
+git checkout your-branch-name
+git pull --ff-only origin your-branch-name
 ```
 
-### 5) Merge to `main`
-
-Use PR review flow when available. After merge:
+### 4. Save progress before moving machines
 
 ```bash
-git checkout main
-git pull --ff-only origin main
+git add .
+git commit -m "wip: saving progress"
+git push
 ```
 
-### 6) Deploy from `main` only
+### 5. Finish the task
 
-```bash
-./scripts/deploy-bot.sh lisa vps
-```
+When the task is ready:
 
----
+1. push the final branch state
+2. merge the task branch into `main`
+3. push `main`
+4. delete the task branch locally and on GitHub
 
-## Deployment Procedure (Must Follow)
+## Deployment Procedure
 
 For remote targets (`vps`, `vps1`, `vps2`), `scripts/deploy-bot.sh` executes this sequence:
 
-1. Validate bot/config paths in monorepo.
-2. Connect to remote host defined in `scripts/deploy-config.sh`.
-3. If remote repo exists:
-   - Fail if remote working tree is dirty.
-   - Run `git fetch origin main`.
-   - Run `git pull --ff-only origin main`.
-4. If remote repo does not exist:
-   - Clone `https://github.com/linktrend/linkbot.git` to target path.
-5. Build bot (`npm ci`, `npm run build`).
-6. Sync runtime config and workspace templates.
-7. Refresh curated skills symlinks.
-8. Restart `openclaw` systemd service and print status.
+1. Validate bot and config paths.
+2. Connect to the remote host from `scripts/deploy-config.sh`.
+3. If the remote repo exists:
+   - fail if the working tree is dirty
+   - run `git fetch origin main`
+   - run `git pull --ff-only origin main`
+4. If the remote repo does not exist:
+   - clone `https://github.com/linktrend/linkbot.git`
+5. Install dependencies with `pnpm install --frozen-lockfile`
+6. Build with `pnpm build`
+7. Sync runtime config and workspace templates
+8. Refresh curated skills symlinks
+9. Restart the `openclaw` service and print status
 
-This guarantees deployed code is an auditable `main` commit.
+## Optional Local Helper
 
----
+`linkbot deploy` remains available as a local convenience wrapper for:
+
+1. staging and committing local changes
+2. running validation
+3. fast-forwarding the branch into `main`
+4. pushing `main`
+5. deploying
+
+It is optional. The canonical workflow is still the explicit branch-based process above.
 
 ## Rollback Procedure
 
-Rollback by Git history, not ad-hoc server edits:
-
-1. Revert offending commit(s) on a branch.
-2. Merge revert to `main`.
-3. Redeploy with `./scripts/deploy-bot.sh <bot> <target>`.
-
-If emergency rollback is required immediately:
+Rollback by Git history, not by editing server files:
 
 ```bash
 git checkout main
@@ -144,48 +131,6 @@ git push origin main
 ./scripts/deploy-bot.sh lisa vps
 ```
 
----
-
-## Multi-Bot Expansion in Monorepo
-
-To add another bot:
-
-1. Create `bots/<bot-name>/`.
-2. Add bot config at `bots/<bot-name>/config/<bot-name>/openclaw.json`.
-3. Commit changes in this same repository.
-4. Deploy via:
-
-```bash
-./scripts/deploy-bot.sh <bot-name> <target>
-```
-
-No separate per-bot source repository is required in this strategy.
-
----
-
-## Troubleshooting
-
-### Remote deploy fails with "repo has local changes"
-
-Cause: manual edits or drift on server.
-
-Action:
-1. Inspect remote diff.
-2. Preserve any needed change by committing to Git locally.
-3. Reset remote deployment repo to clean state through approved ops process.
-4. Redeploy from `main`.
-
-### `--ff-only` pull fails
-
-Cause: remote/local branch divergence.
-
-Action:
-1. Ensure intended commit is merged on `origin/main`.
-2. Bring remote repo back to expected `main` lineage.
-3. Redeploy.
-
----
-
 ## Related Docs
 
 - `MONOREPO_COMPLETE.md`
@@ -193,12 +138,3 @@ Action:
 - `docs/deployment/GITHUB_CLEANUP.md`
 - `docs/deployment/AUTOMATED_WORKFLOW.md`
 - `scripts/deploy-bot.sh`
-
----
-
-## Changelog
-
-| Date | Version | Changes |
-|------|---------|---------|
-| 2026-02-19 | 2.0 | Replaced legacy fork-based strategy with active monorepo + mainline deploy procedure |
-| 2026-02-07 | 1.0 | Initial fork-based strategy (retired) |
