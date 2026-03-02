@@ -5,4 +5,4 @@
 config/lisa/openclaw.json
 config/lisa/exec-approvals.json.example
 docs/reference/templates/TOOLS.md
-
+src/process/exec.test.ts
